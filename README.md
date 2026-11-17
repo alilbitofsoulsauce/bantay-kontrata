@@ -1,37 +1,48 @@
 # Bantay-Kontrata Tagum
 
-An explainable review workflow for City of Tagum awards, published tenders, and DPWH projects. The official procurement extracts use **CITY OF TAGUM, DAVAO DEL NORTE** as the buyer. Scores prioritize records for manual verification.
+An explainable procurement review app for City of Tagum awards, published tenders, and DPWH projects. The official procurement extracts use **CITY OF TAGUM, DAVAO DEL NORTE** as the buyer. Scores prioritize records for manual verification.
 
 This release supports a retrospective review pilot on a single workstation or browser profile. The dashboard dates show what the snapshot covers. The latest official award is dated September 29, 2025. The latest included tender was published September 26, 2026.
 
-## Open the project
+## Run the app
 
-Clone the repository and open its project folder.
+From a Python 3.12 environment, clone the repository and start the app.
 
     git clone https://github.com/alilbitofsoulsauce/bantay-kontrata.git
     cd bantay-kontrata
+    python -m pip install -r requirements-app.txt
+    python app.py
+
+Open **http://127.0.0.1:8000**. The app serves the bundled data and saves reviews to `instance/bantay-kontrata.sqlite3`. The same reviews are available when you restart the app or switch browser profiles on that workstation. Use **Saved reviews → Import backup** to bring in a JSON backup made with the same snapshot. Use **Download backup** to make a portable copy of the saved reviews.
+
+The app listens on the local workstation. For use by an agency team across devices, place that deployment under agency-managed access control. To choose another local port or an agency-approved database file location, use `python app.py --port 8080 --db PATH`.
+
+## Rebuild the data and dashboard
 
 | Goal | Start here |
 |---|---|
-| Explore the results | Open **review/Bantay_Kontrata_Dashboard.html** in a browser. The review queues, charts, and map work offline. Official notice and project links open the publishers' websites. |
+| Open the offline dashboard | Open **review/Bantay_Kontrata_Dashboard.html** directly in a browser. The review queues, charts, and map work offline. Official notice and project links open the publishers' websites. |
 | Rerun in Google Colab | Open **Bantay_Kontrata_Tagum.ipynb** from this GitHub repository in Colab and select **Runtime → Run all**. The notebook fetches the repository in a fresh runtime. Download the rebuilt files from **tagum_review**. |
 | Rerun on a computer | Use Python 3.12 from the project root. See the commands below. |
 | Read the methodology | Open **docs/Bantay_Kontrata_Tagum_Guide.pdf**. |
 
-    python -m pip install -r requirements.txt
+    python -m pip install -r requirements.txt -r requirements-app.txt
     python publish_dashboard.py --output tagum_review
     python -m unittest discover -s tests -v
 
 Open the rebuilt dashboard and tables from `tagum_review/`.
 
+To review that rebuilt snapshot in the app, start it with `python app.py --dashboard tagum_review/Bantay_Kontrata_Dashboard.html`. Each snapshot has its own reviews in the database. Start the app with an earlier dashboard file to reopen reviews from that snapshot.
+
 ## Repository layout
 
 | Path | Contents |
 |---|---|
+| `app.py` | Local web server and SQLite review storage |
 | `data/` | Pipeline inputs and source provenance |
 | `data/supplemental/Bantay_Kontrata_Additional_Datasets.zip` | The complete standalone dataset supplement, including its own manifest and coverage notes |
 | `review/` | The ready-to-open dashboard, ranked tables, crosswalks, and validation report |
-| `tests/` | Reconciliation, model, and refresh tests |
+| `tests/` | App, reconciliation, model, and refresh tests |
 | `docs/` | The field guide and the original research brief under `docs/reference/` |
 
 Run the scripts from the repository root and keep the directory layout. Use the setup above when the field guide refers to the original distribution archive. Git ignores local environment files, generated working copies, and reviewer exports.
@@ -52,7 +63,7 @@ In **Tender review**, **Other notices with this solicitation** shows related sco
 | Reviewed | The available evidence and the reviewer's conclusion are recorded. |
 | Follow up | The evidence suggests a specific question for further review. Enter the question and the supporting document. |
 
-Reviews stay in the browser profile and use the device clock. On a browser that blocks local file storage, the dashboard shows a session-only message and still supports export and restore. Keep backup files with the project, in the same access-controlled location as any internal notes. Open source links only when connected. A model flag is a lead for review. Formal findings require the underlying documents and the office's review process.
+The app records new review times using the workstation clock and saves the reviews in its database. When opening the standalone HTML file, saved reviews stay in that browser profile. If local storage is unavailable, the standalone file uses the open tab and still supports export and restore. Keep review backups and database files in the same access-controlled location as internal notes. Open source links only when connected. A model flag is a lead for review. Formal findings require the underlying documents and the office's review process.
 
 For an agency pilot, name a custodian for the working dashboard and backups. Save a dated copy of the reviewer's usual picks before opening the evidence. Run the screen alongside the existing review process, using that process for referrals and official case records. Review cases above and below the cutoff against the underlying documents. Record document availability, time per case, the planned next document check, and evidence-backed follow-up in both groups. Agree on what would justify continued use before reviewing the sample.
 
