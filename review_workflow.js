@@ -89,15 +89,23 @@ function persistReviews(entries) {
   updateReviewViews();
 }
 
+function syncServerReviewForms() {
+  for (const view of Object.values(reviewViews)) {
+    id(view.inspector).querySelector(".review-entry form")?.dispatchEvent(new Event("reviewstorechange"));
+  }
+}
+
 function updateReviewViews() {
+  renderSavedReviews();
   paintQueueStatuses("award");
   paintQueueStatuses("tender");
-  renderSavedReviews();
-  if (serverReviewMode) {
-    for (const view of Object.values(reviewViews)) {
-      id(view.inspector).querySelector(".review-entry form")?.dispatchEvent(new Event("reviewstorechange"));
-    }
-  }
+  if (typeof refreshReviewStatusQueues === "function") refreshReviewStatusQueues();
+  if (serverReviewMode) syncServerReviewForms();
+}
+
+function showReviewDatabaseUnavailable() {
+  reviewConnection = "unavailable";
+  updateReviewViews();
 }
 
 async function requestServerReviews(update) {
@@ -108,15 +116,11 @@ async function requestServerReviews(update) {
     }) : await fetch("/api/reviews?snapshot_id=" + encodeURIComponent(data.snapshot_id),{cache:"no-store"});
     payload = await response.json();
   } catch {
-    reviewConnection = "unavailable";
-    renderSavedReviews();
+    showReviewDatabaseUnavailable();
     throw new Error("Could not reach the app’s reviews database. Try again.");
   }
   if (!response.ok) {
-    if (response.status >= 500 || reviewRevision === null) {
-      reviewConnection = "unavailable";
-      renderSavedReviews();
-    }
+    if (!update || response.status >= 500 || reviewRevision === null) showReviewDatabaseUnavailable();
     const error = new Error(typeof payload?.error === "string" ? payload.error : "The reviews database rejected the request.");
     error.status = response.status;
     throw error;
@@ -126,8 +130,7 @@ async function requestServerReviews(update) {
     if (!Number.isSafeInteger(payload?.revision) || payload.revision < 0) throw new Error();
     entries = parseReviews(payload);
   } catch {
-    reviewConnection = "unavailable";
-    renderSavedReviews();
+    showReviewDatabaseUnavailable();
     throw new Error("The app returned an invalid review state. Reload and try again.");
   }
   if (reviewRevision === null || payload.revision >= reviewRevision) {
@@ -160,13 +163,8 @@ function paintQueueStatuses(kind) {
   }
 }
 
-function reviewInput(form,input,label,name,value,long = false) {
-  const wrapper = node("label",label,long ? "full" : "");
-  input.name = name;
-  input.value = value;
-  if (name in reviewLimits) input.maxLength = reviewLimits[name];
-  wrapper.append(input);
-  form.append(wrapper);
+function reviewNeedsEvidence(status) {
+  return status === "reviewed" || status === "follow_up";
 }
 
 function reviewFields(entry) {
@@ -199,41 +197,98 @@ function drawCaseReview(container,kind,d) {
   const panel = node("details","","review-entry");
   panel.open = Boolean(draft);
   const summary = node("summary");
+  const savedState = node("span","","review-entry-state");
+  summary.append(node("span","Review case","review-entry-title")," ",savedState);
   const form = node("form");
+  form.noValidate = true;
+  const addInput = (target,input,label,name,full = false) => {
+    const wrapper = node("label","",full ? "full" : "");
+    const labelLine = node("span","","review-field-label");
+    const title = node("span",label);
+    title.id = kind + "-review-label-" + name;
+    const required = node("span","Required","review-required");
+    required.setAttribute("aria-hidden","true");
+    required.hidden = true;
+    labelLine.append(title," ",required);
+    input.name = name;
+    input.value = entered[name];
+    input.setAttribute("aria-labelledby",title.id);
+    if (name in reviewLimits) input.maxLength = reviewLimits[name];
+    wrapper.append(labelLine,input);
+    target.append(wrapper);
+    return required;
+  };
   const status = node("select");
   reviewStatuses.forEach((label,value) => option(status,label,value));
-  reviewInput(form,status,"Review status","status",entered.status);
+  addInput(form,status,"Review status","status");
   const reviewer = node("input");
-  reviewInput(form,reviewer,"Reviewer initials","reviewer",entered.reviewer);
+  const reviewerRequired = addInput(form,reviewer,"Reviewer initials","reviewer");
+  const statusHint = node("p","","small review-status-hint full");
+  statusHint.id = kind + "-review-status-hint";
+  status.setAttribute("aria-describedby",statusHint.id);
+  form.append(statusHint);
+  const evidenceGroup = node("fieldset","","review-evidence full");
+  const evidenceLegend = node("legend","Evidence");
+  const evidenceRequired = node("span","One required","review-required");
+  evidenceLegend.append(" ",evidenceRequired);
+  const evidenceFields = node("div","","review-evidence-fields");
   const evidence = node("input");
   evidence.type = "url";
   evidence.placeholder = "https://";
-  reviewInput(form,evidence,"Evidence link","evidence_url",entered.evidence_url,true);
+  addInput(evidenceFields,evidence,"HTTPS evidence link","evidence_url");
   const reference = node("input");
-  reviewInput(form,reference,"Internal document reference","evidence_ref",entered.evidence_ref,true);
+  reference.placeholder = "Document ID or file number";
+  addInput(evidenceFields,reference,"Internal document reference","evidence_ref");
+  evidenceGroup.append(evidenceLegend,evidenceFields);
   const notes = node("textarea");
   notes.rows = 3;
-  notes.placeholder = "What did you verify, or which document is still needed?";
-  reviewInput(form,notes,"Notes","notes",entered.notes,true);
+  const notesRequired = addInput(form,notes,"Notes","notes",true);
+  form.append(evidenceGroup);
   const save = node("button","Save review","minor primary");
   save.type = "submit";
   const discard = node("button","Discard draft","minor");
   discard.type = "button";
   const actions = node("div","","actions full");
-  const pending = node("p","Unsaved changes are kept on this page until you save or discard them.","small full");
+  const footer = node("div","","review-form-footer full");
+  const pending = node("p","Unsaved draft. Save it before closing this page.","small review-draft-notice");
   const feedback = node("p","","small review-feedback full");
+  feedback.id = kind + "-review-form-feedback";
   feedback.setAttribute("role","status");
+  const connection = node("div","","review-database-notice");
+  connection.hidden = true;
+  const retry = node("button","Retry connection","minor");
+  retry.type = "button";
+  connection.append(node("p","Database unavailable. Drafts stay on this page.","small"),retry);
   actions.append(save,discard);
-  form.append(actions,pending,feedback);
-  const source = node("p","For Reviewed and Follow up, enter your initials, explain your decision in Notes, and add an evidence link or internal document reference.","small");
-  panel.append(summary,source,form);
+  footer.append(pending,connection,actions,feedback);
+  form.append(footer);
+  panel.append(summary,form);
   container.append(panel);
 
   const fieldNames = Object.keys(entered);
   const readFields = () => Object.fromEntries(fieldNames.map(name => [name,form.elements[name].value]));
+  const syncRequirements = () => {
+    const needsEvidence = reviewNeedsEvidence(status.value);
+    reviewer.required = notes.required = needsEvidence;
+    reviewerRequired.hidden = notesRequired.hidden = evidenceRequired.hidden = !needsEvidence;
+    const hints = {
+      in_review:"Log that you have started checking this case.",
+      needs_documents:"Note which documents you still need.",
+      reviewed:"Summarize what you verified and add an evidence link or internal document reference.",
+      follow_up:"Record the next action and add an evidence link or internal document reference."
+    };
+    statusHint.textContent = hints[status.value];
+  };
+  const clearFieldErrors = () => {
+    for (const field of [reviewer,notes,evidence,reference]) {
+      field.removeAttribute("aria-invalid");
+      field.removeAttribute("aria-errormessage");
+    }
+  };
   const showDraftState = dirty => {
-    const label = original ? "Review · " + reviewStatuses.get(original.status) : "Record review";
-    summary.textContent = label + (dirty ? " · Unsaved draft" : "");
+    panel.dataset.reviewState = dirty ? "draft" : original ? "saved" : "not-started";
+    savedState.dataset.state = panel.dataset.reviewState;
+    savedState.textContent = dirty ? "Unsaved draft" : original ? "Saved · " + reviewStatuses.get(original.status) : "Not started";
     discard.hidden = pending.hidden = !dirty;
   };
   const resetForm = saved => {
@@ -241,64 +296,107 @@ function drawCaseReview(container,kind,d) {
     const fields = reviewFields(saved);
     for (const name of fieldNames) form.elements[name].value = fields[name];
     setReviewDraft(key,null);
+    clearFieldErrors();
+    syncRequirements();
     showDraftState(false);
   };
-  const setSaveMessage = message => {
-    if (serverReviewMode) reviewSaveMessages.set(key,message);
-    feedback.textContent = message;
+  const paintFeedback = ({message = "",tone = ""} = {}) => {
+    feedback.dataset.state = tone;
+    if (feedback.textContent !== message) feedback.textContent = message;
   };
+  const setSaveMessage = (message,tone = "") => {
+    const result = {message,tone};
+    if (serverReviewMode) {
+      if (message) reviewSaveMessages.set(key,result);
+      else reviewSaveMessages.delete(key);
+    }
+    paintFeedback(result);
+  };
+  let reconnecting = false;
   const syncServerForm = () => {
     const saving = reviewSaves.has(key);
     for (const control of form.elements) control.disabled = saving;
+    connection.hidden = reviewConnection !== "unavailable";
+    retry.disabled = saving || reconnecting;
     const saved = loadReviews().get(key);
     if (!saving && !reviewDrafts.has(key) && !sameReview(saved,original)) resetForm(saved);
-    feedback.textContent = reviewSaveMessages.get(key) ?? "";
+    paintFeedback(reviewSaveMessages.get(key));
   };
+  syncRequirements();
   showDraftState(Boolean(draft));
   if (serverReviewMode) {
     form.addEventListener("reviewstorechange",syncServerForm);
     syncServerForm();
+    retry.onclick = async () => {
+      reconnecting = true;
+      setSaveMessage("Checking the app database…","pending");
+      syncServerForm();
+      try {
+        await requestServerReviews();
+        setSaveMessage("App database connection restored.","success");
+        if (form.isConnected) save.focus({preventScroll:true});
+      } catch (error) {
+        setSaveMessage(error.message,"error");
+      } finally {
+        reconnecting = false;
+        syncServerForm();
+      }
+    };
   }
-  form.addEventListener("input",() => {
+  form.addEventListener("input",event => {
     const fields = readFields();
     const dirty = !sameReview(fields,reviewFields(original));
     setReviewDraft(key,dirty ? {original,fields} : null);
     showDraftState(dirty);
-    if (serverReviewMode) setSaveMessage("");
+    if (event.target === status) syncRequirements();
+    clearFieldErrors();
+    setSaveMessage("");
   });
   discard.onclick = () => {
     resetForm(loadReviews().get(key));
-    setSaveMessage("Draft discarded.");
+    setSaveMessage("Draft discarded.","notice");
     notes.focus();
+  };
+  const showFieldError = (fields,message) => {
+    for (const field of fields) {
+      field.setAttribute("aria-invalid","true");
+      field.setAttribute("aria-errormessage",feedback.id);
+    }
+    setSaveMessage(message,"error");
+    fields[0].focus();
   };
   form.addEventListener("submit",async event => {
     event.preventDefault();
     if (reviewSaves.has(key)) return;
+    clearFieldErrors();
     const fields = Object.fromEntries(Object.entries(readFields()).map(([name,value]) => [name,value.trim()]));
     if (evidenceLink(fields.evidence_url) === null) {
-      setSaveMessage("Use an HTTPS evidence link, or leave that field blank.");
-      evidence.focus();
+      showFieldError([evidence],"Use an HTTPS evidence link, or clear the link field.");
       return;
     }
-    if ((fields.status === "reviewed" || fields.status === "follow_up") &&
-        (!fields.reviewer || !fields.notes || (!fields.evidence_url && !fields.evidence_ref))) {
-      setSaveMessage("Enter your initials, explain your decision in Notes, and add an evidence link or internal document reference.");
-      const missing = !fields.reviewer ? reviewer : !fields.notes ? notes : reference;
-      missing.focus();
-      return;
+    if (reviewNeedsEvidence(fields.status)) {
+      const missing = new Map();
+      if (!fields.reviewer) missing.set(reviewer,"your initials");
+      if (!fields.notes) missing.set(notes,"notes explaining your decision");
+      if (!fields.evidence_url && !fields.evidence_ref) missing.set(reference,"an evidence link or internal document reference");
+      if (missing.size) {
+        const labels = new Intl.ListFormat("en-PH").format(missing.values());
+        showFieldError([...missing.keys()],"Enter " + labels + ".");
+        return;
+      }
     }
     if (serverReviewMode) {
       reviewSaves.add(key);
-      setSaveMessage("Saving review…");
+      setSaveMessage("Saving review…","pending");
       syncServerForm();
     }
     const warnIfCaseChanged = saved => {
       if (sameReview(saved,original)) return false;
       if (reviewDrafts.has(key)) {
-        setSaveMessage("The saved review changed. Copy any draft text you need, then discard the draft to load the latest saved review.");
+        setSaveMessage("The saved review changed. Copy any draft text you need, then discard the draft to load the latest saved review.","error");
       } else {
         resetForm(saved);
-        setSaveMessage("The saved review changed. The latest version is shown here.");
+        setSaveMessage("The saved review changed. The latest version is shown here.","notice");
       }
       return true;
     };
@@ -309,13 +407,13 @@ function drawCaseReview(container,kind,d) {
       const next = await persistReviewChanges(state,[saved],"edit");
       resetForm(next.entries.get(key));
       setSaveMessage(serverReviewMode ? "Review saved in the app database." : reviewStore ?
-        "Review saved in this browser." : "Review saved for this session. Download a backup in Saved reviews before closing.");
+        "Review saved in this browser." : "Review saved for this session. Download a backup in Saved reviews before closing.","success");
     } catch (error) {
       if (error.status === 409) {
         await requestServerReviews().catch(() => {});
         if (warnIfCaseChanged(loadReviews().get(key))) return;
       }
-      setSaveMessage("Review could not be saved. " + error.message);
+      setSaveMessage("Review could not be saved. " + error.message,"error");
     } finally {
       if (serverReviewMode) {
         reviewSaves.delete(key);
@@ -328,6 +426,8 @@ function drawCaseReview(container,kind,d) {
 function openSavedReview(key) {
   const {kind,d} = reviewRecords.get(key);
   const view = reviewViews[kind];
+  const statusFilter = id(kind + "ReviewStatus");
+  if (statusFilter) statusFilter.value = "";
   if (kind === "award") {
     id("awardSearch").value = "";
     id("awardCategory").value = "";
@@ -343,6 +443,7 @@ function openSavedReview(key) {
   selectTab(id(view.verb + "-tab"));
   view.state.page = Math.floor(data[kind].records.indexOf(d) / reviewPageSize);
   renderReview(kind,d[view.key]);
+  if (typeof showReviewCase === "function") showReviewCase(kind);
   const panel = id(view.inspector).querySelector(".review-entry");
   panel.open = true;
   panel.querySelector("summary").focus();
@@ -368,6 +469,17 @@ function renderSavedReviews() {
   id("reviewStorage").textContent = serverReviewMode ? connectionMessages[reviewConnection] : reviewStore ?
     "Reviews are saved in this browser for this data snapshot. Download a backup to resume on another device." :
     "Browser storage is unavailable. Download a backup before closing this page.";
+  const appConnection = id("appConnection");
+  if (appConnection) {
+    const states = {
+      connecting:["connecting","Connecting"],connected:["ready","Database ready"],
+      unavailable:["unavailable","Database unavailable"]
+    };
+    const [state,message] = serverReviewMode ? states[reviewConnection] : reviewStore ?
+      ["browser","Browser storage"] : ["session","Session only"];
+    appConnection.dataset.state = state;
+    if (appConnection.textContent !== message) appConnection.textContent = message;
+  }
   id("reviewCsv").disabled = id("reviewBackup").disabled = !serverReviewMode && entries.length === 0;
   for (const entry of visible) {
     const {kind,d} = reviewRecords.get(entry.key);
@@ -531,10 +643,14 @@ function initializeReviewWorkflow() {
     }
   }
   const snapshot = data.coverage;
-  id("snapshotBanner").textContent = "Retrospective snapshot " + data.snapshot_id.slice(0,12) +
-    " · Official tenders through " + snapshot.latest_tender_publication_date +
-    " · Official awards through " + snapshot.latest_official_award_date +
-    ". Confirm current status and deadlines in the official notice and amendments.";
+  const coverageDate = new Intl.DateTimeFormat("en-PH",{dateStyle:"medium",timeZone:"UTC"});
+  const snapshotBanner = id("snapshotBanner");
+  snapshotBanner.title = "Snapshot " + data.snapshot_id.slice(0,12);
+  snapshotBanner.replaceChildren(node("strong","Historical data"),document.createTextNode(
+    " · Tenders through " + coverageDate.format(new Date(snapshot.latest_tender_publication_date + "T00:00:00Z")) +
+    " · Official awards through " + coverageDate.format(new Date(snapshot.latest_official_award_date + "T00:00:00Z")) +
+    ". Confirm current deadlines in the official notice."
+  ));
   reviewStatuses.forEach((label,value) => option(id("savedStatus"),label,value));
   id("savedStatus").onchange = renderSavedReviews;
   id("reviewStorage").setAttribute("role","status");

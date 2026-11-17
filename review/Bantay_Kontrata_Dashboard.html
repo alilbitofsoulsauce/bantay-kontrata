@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bantay-Kontrata Tagum</title>
 <style>
-:root{--ink:#182638;--muted:#536477;--line:#d9e4ed;--paper:#f3f7fa;--blue:#101f35;--teal:#136d64;--mint:#dff4ed;--amber:#945514;--soft-amber:#fff2d8;--white:#fff}
+:root{--ink:#17283b;--muted:#506276;--line:#d8e2e9;--paper:#f4f7f9;--blue:#132538;--teal:#086c61;--mint:#e0f4ed;--amber:#945514;--soft-amber:#fff2d8;--white:#fff}
 *{box-sizing:border-box}
 body{margin:0;color:var(--ink);background:var(--paper);font:15px/1.53 Inter,"Segoe UI",sans-serif}
 a{color:#0c655b;text-underline-offset:3px}
@@ -13,34 +13,65 @@ button,select,input,textarea{font:inherit}
 button:not(:disabled),select{cursor:pointer}
 button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,a:focus-visible,canvas:focus-visible{outline:3px solid #2c9b8b;outline-offset:2px}
 [hidden]{display:none!important}
-.wrap{width:min(1320px,calc(100% - 56px));margin-inline:auto}
+.wrap{width:min(1360px,calc(100% - 56px));margin-inline:auto}
 header{background:var(--blue);color:var(--white)}
-.mast{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 0;border-bottom:1px solid #ffffff24}
-.brand{display:flex;align-items:center;gap:11px;font-size:.95rem;font-weight:700}
-.brand-mark{width:15px;height:15px;border:3px solid #76d5be;border-radius:4px;transform:rotate(-10deg)}
-.source-year{color:#b9c8d5;font-size:.82rem;text-align:right}
-.hero{padding:31px 0 33px;display:flex;justify-content:space-between;align-items:end;gap:24px}
+.mast{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:74px;padding:12px 0}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand-mark{width:36px;height:36px;flex:0 0 36px;border:1px solid #4b877f;border-radius:10px;background:#214e4d;color:#acf1da;display:grid;place-items:center;font-size:.83rem;font-weight:800;letter-spacing:.02em}
+.source-year{color:#c0d2dd;font-size:.78rem;margin-top:2px}
 h1,h2,h3,p{margin:0}
-h1{font-size:clamp(2rem,5vw,3.35rem);line-height:1.04;letter-spacing:-.055em}
-.hero p{color:#c9d7e3;margin-top:12px;max-width:680px}
-.hero-side{font-size:.85rem;color:#c9d7e3}
-nav{background:var(--white);border-bottom:1px solid var(--line)}
-.nav-items{display:flex;align-items:center;gap:24px}
-.tab{border:0;border-bottom:3px solid transparent;background:transparent;padding:13px 2px 11px;font-weight:650;color:var(--muted);white-space:nowrap}
-.tab[aria-selected="true"]{border-color:var(--teal);color:var(--teal)}
-main{padding:24px 0 38px}
-.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:14px}
-.metric,.card{background:var(--white);border:1px solid var(--line);border-radius:13px}
-.metric{padding:15px 18px}
-.metric strong{display:block;font-size:1.8rem;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:4px}
+h1{font-size:clamp(1rem,2.4vw,1.35rem);line-height:1.12;letter-spacing:-.026em}
+.connection-state{border:1px solid #608190;border-radius:8px;padding:5px 9px;color:#e3eef3;font-size:.75rem;text-align:center}
+.connection-state:empty{display:none}
+.connection-state[data-state="ready"]{border-color:#539888;color:#ccf9eb}
+.connection-state[data-state="unavailable"]{border-color:#cd9860;color:#ffe0ba}
+.skip-link{position:absolute;z-index:10;left:12px;top:12px;transform:translateY(-160%);background:#fff;padding:10px 14px;border-radius:8px}
+.skip-link:focus{transform:none}
+nav{position:sticky;top:0;z-index:3;background:var(--white);border-bottom:1px solid var(--line)}
+.nav-items{display:flex;align-items:center;gap:5px;padding-block:5px}
+.tab{border:1px solid transparent;border-radius:7px;background:transparent;min-height:42px;padding:6px 13px;font-weight:650;color:var(--muted);white-space:nowrap}
+.tab:hover{background:#f1f6f7}
+.tab[aria-selected="true"]{border-color:#c4e2d9;background:#e9f5f1;color:#075a51}
+main{padding:17px 0 34px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.metric,.card{background:var(--white);border:1px solid var(--line);border-radius:11px}
+.metric{padding:11px 15px}
+.metric strong{display:block;font-size:1.6rem;font-variant-numeric:tabular-nums;line-height:1.15;margin-top:2px}
 .metric span,.small{font-size:.86rem;color:var(--muted)}
-.card{padding:18px 20px;min-width:0}
+.card{padding:18px 20px;min-width:0;box-shadow:0 2px 6px #13253806}
 .card + .card{margin-top:15px}
 h2{font-size:1.22rem;line-height:1.25;letter-spacing:-.018em}
 h3{font-size:1.01rem;line-height:1.25}
 .sub{font-size:.87rem;color:var(--muted);margin-top:5px}
-.review-layout{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(345px,1fr);gap:15px;margin-top:15px;align-items:start}
+.review-layout{display:grid;grid-template-columns:minmax(0,1.21fr) minmax(360px,1fr);gap:14px;align-items:start}
 .review-layout .card{margin:0}
+.review-queue .data-scroll{max-height:59vh;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.review-queue th{position:sticky;top:0;z-index:1}
+.review-queue .case-button{width:100%;min-height:32px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.review-queue tr.active td:first-child{box-shadow:inset 3px 0 var(--teal)}
+.review-queue tbody tr:hover:not(.active) td{background:#f5f8fa}
+.controls.queue-controls{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr));gap:9px}
+.queue-toggles{grid-column:1/-1}
+.controls.queue-controls select{width:100%;max-width:none;min-height:37px}
+.queue-toggles{display:flex;align-items:center;gap:5px 12px;flex-wrap:wrap}
+.queue-toggles .check{padding:0;min-height:36px}
+.queue-toggles .minor{margin-left:auto}
+.timeline-filter{margin:0 0 10px;padding:7px 10px;border:1px solid var(--line);border-radius:7px}
+.timeline-filter summary{cursor:pointer;color:#215363;font-size:.83rem;font-weight:700}
+.case-nav,.case-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.case-nav{justify-content:space-between;margin-bottom:10px}
+.case-back{display:inline-flex;align-items:center}
+.case-actions{margin:11px 0 13px}
+.case-actions .primary{color:#fff;background:var(--teal);border-color:var(--teal);font-weight:700}
+.case-actions a{display:inline-flex;align-items:center;text-decoration:none}
+.case-heading{font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.25;overflow-wrap:anywhere;scroll-margin-top:72px}
+.case-heading:focus{outline:none}
+.empty-state{padding:22px 12px;text-align:center;color:var(--muted)}
+.empty-state h3{color:var(--ink);margin-bottom:5px}
+.technical-panel{margin-top:14px;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.technical-panel summary{cursor:pointer;color:#255365;font-weight:700;font-size:.86rem}
+.technical-panel > .case-facts{margin-top:8px}
+.source-card.verification-guide{background:#eaf7f3;border:1px solid #c3e4d9}
 .timeline{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:7px;margin-top:12px}
 .month{appearance:none;background:transparent;border:0;padding:2px;min-width:0;color:var(--muted);font-size:.72rem;text-align:center}
 .month[aria-pressed="true"]{background:#e8f4f2;color:var(--teal);border-radius:5px;font-weight:750}
@@ -64,20 +95,35 @@ tr.active td{background:#eff9f6}
 .case-button{border:0;background:transparent;text-align:left;padding:0;color:#165f58;font-weight:700;line-height:1.3;display:block;max-width:100%}
 .case-button:hover,.case-button:focus-visible{text-decoration:underline}
 .case-sub{font-size:.75rem;color:var(--muted);display:block;margin-top:3px}
-.snapshot{margin-bottom:15px;padding:9px 13px;border:1px solid var(--line);border-radius:8px;background:var(--white);font-size:.81rem;color:var(--muted)}
-.review-entry{margin:13px 0;padding:9px 12px;background:#f0f7f5;border:1px solid #c9e1da;border-radius:8px}
-.review-entry summary{cursor:pointer;color:#165f58;font-size:.88rem;font-weight:700}
-.review-entry form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.snapshot{margin-bottom:12px;padding:8px 12px;border:1px solid #dddfd2;border-left:3px solid #a57636;border-radius:7px;background:#fcfaf4;font-size:.8rem;color:#574929}
+.review-entry{margin:13px 0;padding:11px 12px;background:#f5f9f8;border:1px solid #c9e1da;border-radius:9px;scroll-margin-top:72px}
+.review-entry summary{cursor:pointer;color:#195c54;font-size:.9rem;font-weight:700}
+.review-entry form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:10px}
 .review-entry label{display:block;color:var(--muted);font-size:.8rem;font-weight:650;min-width:0}
-.review-entry input,.review-entry select,.review-entry textarea{display:block;width:100%;padding:6px 8px;margin-top:3px;border:1px solid #bdcfdb;border-radius:6px;background:#fff;color:var(--ink)}
+.review-entry input,.review-entry select,.review-entry textarea{display:block;width:100%;padding:8px 9px;margin-top:3px;border:1px solid #bdcfdb;border-radius:7px;background:#fff;color:var(--ink);min-height:39px}
 .review-entry textarea{resize:vertical}
+.review-entry-state{display:inline-block;margin-left:7px;font-size:.73rem;font-weight:650;color:#425c65}
+.review-entry-state[data-state="draft"],.review-draft-notice{color:#794807}
+.review-entry-state[data-state="saved"]{color:#165f58}
+.review-required{color:#84500f;font-size:.74rem;font-weight:650}
+.review-evidence{min-width:0;border:1px solid var(--line);border-radius:8px;margin:0;padding:8px 10px}
+.review-evidence legend{font-weight:700;font-size:.8rem;color:var(--ink);padding:0 4px}
+.review-evidence-fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.review-form-footer{display:grid;gap:6px}
+.review-database-notice{font-size:.8rem;color:#784703}
+.review-database-notice button{margin-top:5px}
+.review-status-hint{font-size:.78rem;color:var(--muted);margin-top:4px}
 .review-entry .full{grid-column:1/-1}
 .review-entry .actions,.review-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start}
 .review-entry .actions{margin-top:0}
 .review-tools{align-items:center;margin:13px 0 10px}
 .review-entry .primary{background:var(--teal);color:white;border-color:var(--teal);font-weight:650}
+.review-entry .primary:not(:disabled):hover{background:#09554e}
 .saved-label{color:#165f58;font-weight:700}
 .review-feedback{line-height:1.4;min-height:1.35em}
+.review-feedback:empty{min-height:0}
+.review-feedback[data-state="error"]{color:#9e291d;font-weight:650}
+.review-feedback[data-state="success"]{color:#0c6355;font-weight:650}
 .review-comparison{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:16px;margin-top:8px}
 .review-comparison dl{margin:0}
 .review-comparison dt{margin-top:6px;font-weight:650}
@@ -90,10 +136,10 @@ tr.active td{background:#eff9f6}
 .pill.neutral{color:#455972;background:#eaf0f7}
 .actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:13px}
 .pager{display:flex;gap:5px}
-.minor,.methods button{background:#fff;border:1px solid #cbd8e2;color:var(--ink);border-radius:7px;padding:5px 9px;font-size:.83rem}
+.minor,.methods button{background:#fff;border:1px solid #cbd8e2;color:var(--ink);border-radius:7px;padding:6px 10px;min-height:36px;font-size:.83rem}
+.minor:not(:disabled):hover,.methods button:hover{border-color:#86a9ac;background:#f1f8f6}
+.case-actions .primary:hover{background:#09554e;color:#fff}
 .minor:disabled{color:#748396;cursor:default;background:#f2f6fa}
-.case-title{margin:8px 0;font-size:1.09rem;overflow-wrap:anywhere}
-.case-vendor{margin-bottom:10px}
 .case-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;padding:11px 0;margin:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .case-facts dt{color:var(--muted);font-size:.76rem}
 .case-facts dd{margin:2px 0 0;font-size:.88rem;font-weight:650;overflow-wrap:anywhere}
@@ -135,24 +181,59 @@ tr.active td{background:#eff9f6}
 .source-links{margin:15px 0 0;padding:0;list-style:none;display:flex;gap:8px 18px;flex-wrap:wrap;font-size:.83rem}
 footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 17px}
 .note{padding:8px 0;font-size:.84rem;color:var(--muted)}
-@media(max-width:1060px){.wrap{width:calc(100% - 36px)}.review-layout{grid-template-columns:minmax(0,1.1fr) minmax(330px,1fr)}.card{padding:15px}}
-@media(max-width:840px){.review-layout,.map-layout{grid-template-columns:1fr}.hero-side{display:none}.results-grid{grid-template-columns:1fr}.source-year{font-size:.75rem}}
-@media(max-width:500px){.wrap{width:calc(100% - 24px)}.metrics{gap:6px}.metric{padding:11px 9px}.metric strong{font-size:1.3rem}.metric span{font-size:.72rem;line-height:1.2;display:block}.nav-items{gap:10px;overflow-x:auto}.tab{font-size:.81rem}.timeline{gap:2px}.month{font-size:.62rem}.brand{font-size:.87rem}.hide-small{display:none}.bar-row{grid-template-columns:minmax(102px,1fr) minmax(65px,.8fr) 58px;gap:5px}.controls select{max-width:170px}#map{height:326px}}
+@media(max-width:1060px){
+  .wrap{width:calc(100% - 36px)}
+  .review-layout{grid-template-columns:minmax(0,1.1fr) minmax(330px,1fr)}
+  .card{padding:15px}
+  .controls.queue-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .queue-controls .search{grid-column:1/-1}
+}
+@media(max-width:840px){
+  .review-layout,.map-layout,.results-grid{grid-template-columns:minmax(0,1fr)}
+  .review-layout:not([data-pane="case"])>.review-inspector,.review-layout[data-pane="case"]>.review-queue{display:none}
+  .review-queue .data-scroll{max-height:none;overflow-x:auto}
+  .review-queue th{position:static}
+  .case-nav{position:sticky;top:53px;z-index:2;background:#fff;padding-block:4px}
+  .case-heading,.review-entry{scroll-margin-top:104px}
+}
+@media(max-width:600px){
+  .wrap{width:calc(100% - 22px)}
+  .mast{min-height:60px;gap:8px}
+  .brand{gap:7px}
+  .brand-mark{width:29px;height:29px;flex-basis:29px;border-radius:7px;font-size:.71rem}
+  .source-year,.connection-state{font-size:.7rem}
+  .nav-items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}
+  .tab{font-size:.77rem;min-height:44px;padding:4px 3px;white-space:normal}
+  .case-nav{top:102px}
+  .case-heading,.review-entry{scroll-margin-top:151px}
+  .review-queue .case-button,.case-actions .minor{min-height:44px}
+  .metrics{gap:5px}
+  .metric{padding:8px}
+  .metric strong{font-size:1.23rem}
+  .metric span{font-size:.72rem;line-height:1.24;display:block}
+  .card{padding:12px}
+  .timeline{grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}
+  .month{font-size:.72rem}
+  .review-evidence-fields{grid-template-columns:1fr}
+  .hide-small{display:none}
+  .bar-row{grid-template-columns:minmax(92px,1fr) minmax(44px,.7fr) 54px;gap:5px}
+  #map{height:326px}
+}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#workspace">Skip to workspace</a>
 <header>
   <div class="wrap mast">
-    <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Bantay-Kontrata Tagum</div>
-    <div class="source-year">City of Tagum, Davao del Norte</div>
-  </div>
-  <div class="wrap hero">
-    <div><h1>Procurement review</h1><p>Inspect 2025 awards, screen published tenders, and verify DPWH project records.</p></div>
-    <div class="hero-side">PhilGEPS and DPWH records</div>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">BK</span>
+      <div><h1>Bantay-Kontrata</h1><p class="source-year">City of Tagum · Procurement review</p></div>
+    </div>
+    <div class="connection-state" id="appConnection" role="status"></div>
   </div>
 </header>
-<nav aria-label="Dashboard sections">
-  <div class="wrap nav-items" role="tablist" aria-label="Dashboard sections">
+<nav aria-label="App sections">
+  <div class="wrap nav-items" role="tablist" aria-label="App sections">
     <button class="tab" role="tab" id="awards-tab" aria-controls="awards" aria-selected="true" data-section="awards">Award review</button>
     <button class="tab" role="tab" id="tenders-tab" aria-controls="tenders" aria-selected="false" tabindex="-1" data-section="tenders">Tender review</button>
     <button class="tab" role="tab" id="saved-tab" aria-controls="saved" aria-selected="false" tabindex="-1" data-section="saved">Saved reviews</button>
@@ -160,30 +241,33 @@ footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 17px}
     <button class="tab" role="tab" id="validation-tab" aria-controls="validation" aria-selected="false" tabindex="-1" data-section="validation">Validation</button>
   </div>
 </nav>
-<main class="wrap">
+<main class="wrap" id="workspace" tabindex="-1">
 <p class="snapshot" id="snapshotBanner"></p>
 <section id="awards" role="tabpanel" aria-labelledby="awards-tab">
   <div class="metrics">
     <div class="metric"><span>2025 awards scored</span><strong id="awardCount"></strong></div>
-    <div class="metric"><span>Above review cutoff</span><strong id="flagCount"></strong></div>
-    <div class="metric"><span>Review rows with a linked tender</span><strong id="linkedFlagCount"></strong></div>
+    <div class="metric"><span>Flagged to review</span><strong id="flagCount"></strong></div>
+    <div class="metric"><span>Flags with a linked tender</span><strong id="linkedFlagCount"></strong></div>
   </div>
-  <div class="card">
-    <h2>Awards by month</h2>
-    <div class="legend small"><span><i></i>Scored awards</span><span><i class="green"></i>Above cutoff</span><span>Select a month to filter the queue.</span></div>
-    <div class="timeline" id="timeline"></div>
-  </div>
-  <div class="review-layout">
-    <section class="card">
-      <h2>Review queue</h2>
-      <p class="sub">Open a row to check published evidence and record your review. Higher scores prioritize unusual records.</p>
-      <div class="controls">
+  <div class="review-layout" id="awardLayout">
+    <section class="card review-queue" aria-labelledby="awardQueueTitle">
+      <h2 id="awardQueueTitle">Award queue</h2>
+      <div class="controls queue-controls">
         <label class="search">Find an award<input id="awardSearch" type="search" placeholder="Title, vendor or ID"></label>
         <label>Category<select id="awardCategory"><option value="">All categories</option></select></label>
-        <label class="check"><input type="checkbox" id="flagsOnly" checked>Above cutoff</label>
-        <label class="check"><input type="checkbox" id="awardLinked">Linked tender</label>
+        <label>Review status<select id="awardReviewStatus"><option value="">All statuses</option><option value="unreviewed">No review yet</option></select></label>
+        <div class="queue-toggles">
+          <label class="check"><input type="checkbox" id="flagsOnly" checked>Flagged only</label>
+          <label class="check"><input type="checkbox" id="awardLinked">Linked tender</label>
+          <button class="minor" type="button" id="awardReset">Clear filters</button>
+        </div>
       </div>
-      <div class="data-scroll">
+      <details class="timeline-filter">
+        <summary id="awardMonthLabel">Filter by month</summary>
+        <div class="legend small"><span><i></i>Scored awards</span><span><i class="green"></i>Above cutoff</span></div>
+        <div class="timeline" id="timeline"></div>
+      </details>
+      <div class="data-scroll" tabindex="0" role="region" aria-label="Award queue results">
         <table aria-label="Ranked awards">
           <thead><tr><th scope="col" class="num">Rank</th><th scope="col">Award and vendor</th><th scope="col" class="num hide-small">Amount</th><th scope="col" class="num">Score</th></tr></thead>
           <tbody id="awardTable"></tbody>
@@ -191,28 +275,32 @@ footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 17px}
       </div>
       <div class="actions">
         <div class="small" id="awardRange" aria-live="polite"></div>
-        <div class="pager"><button class="minor" id="awardPrev">Previous</button><button class="minor" id="awardNext">Next</button></div>
+        <div class="pager"><button class="minor" id="awardPrev" aria-label="Previous awards">Previous</button><button class="minor" id="awardNext" aria-label="Next awards">Next</button></div>
       </div>
     </section>
-    <section class="card" id="inspector" aria-label="Selected award explanation"></section>
+    <section class="card review-inspector" id="inspector" aria-label="Selected award"></section>
   </div>
 </section>
 <section id="tenders" role="tabpanel" aria-labelledby="tenders-tab" hidden>
   <div class="metrics">
     <div class="metric"><span>Tenders scored since 2026</span><strong id="tenderCount"></strong></div>
-    <div class="metric"><span>Above review cutoff</span><strong id="tenderFlagCount"></strong></div>
+    <div class="metric"><span>Flagged to review</span><strong id="tenderFlagCount"></strong></div>
     <div class="metric"><span>Tenders in the source extract</span><strong id="allTenderCount"></strong></div>
   </div>
-  <div class="review-layout">
-    <section class="card">
-      <h2>Tender review queue</h2>
-      <p class="sub">Review notices from the snapshot. For newer notices and awards, open the <a href="https://philgeps.gov.ph/Indexes/index" target="_blank" rel="noopener noreferrer">modernized PhilGEPS Bulletin Board</a>.</p>
-      <div class="controls">
+  <div class="review-layout" id="tenderLayout">
+    <section class="card review-queue" aria-labelledby="tenderQueueTitle">
+      <h2 id="tenderQueueTitle">Tender queue</h2>
+      <p class="sub">For newer notices, open the <a href="https://philgeps.gov.ph/Indexes/index" target="_blank" rel="noopener noreferrer">PhilGEPS Bulletin Board</a>.</p>
+      <div class="controls queue-controls">
         <label class="search">Find a tender<input id="tenderSearch" type="search" placeholder="Title, bid ID or solicitation"></label>
         <label>Procurement mode<select id="tenderMode"><option value="">All modes</option></select></label>
-        <label class="check"><input type="checkbox" id="tenderFlagsOnly" checked>Above cutoff</label>
+        <label>Review status<select id="tenderReviewStatus"><option value="">All statuses</option><option value="unreviewed">No review yet</option></select></label>
+        <div class="queue-toggles">
+          <label class="check"><input type="checkbox" id="tenderFlagsOnly" checked>Flagged only</label>
+          <button class="minor" type="button" id="tenderReset">Clear filters</button>
+        </div>
       </div>
-      <div class="data-scroll">
+      <div class="data-scroll" tabindex="0" role="region" aria-label="Tender queue results">
         <table aria-label="Ranked tenders">
           <thead><tr><th scope="col" class="num">Rank</th><th scope="col">Tender and date</th><th scope="col" class="num hide-small">Bid window</th><th scope="col" class="num">Score</th></tr></thead>
           <tbody id="tenderTable"></tbody>
@@ -220,10 +308,10 @@ footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 17px}
       </div>
       <div class="actions">
         <div class="small" id="tenderRange" aria-live="polite"></div>
-        <div class="pager"><button class="minor" id="tenderPrev">Previous</button><button class="minor" id="tenderNext">Next</button></div>
+        <div class="pager"><button class="minor" id="tenderPrev" aria-label="Previous tenders">Previous</button><button class="minor" id="tenderNext" aria-label="Next tenders">Next</button></div>
       </div>
     </section>
-    <section class="card" id="tenderInspector" aria-label="Selected tender explanation"></section>
+    <section class="card review-inspector" id="tenderInspector" aria-label="Selected tender"></section>
   </div>
 </section>
 <section id="saved" role="tabpanel" aria-labelledby="saved-tab" hidden>
@@ -375,11 +463,13 @@ const externalLink = (label, url) => {
   return link;
 };
 function selectTab(tab, focus = false) {
+  const changed = tab.getAttribute("aria-selected") !== "true";
   for (const item of tabs) {
     item.setAttribute("aria-selected", String(item === tab));
     item.tabIndex = item === tab ? 0 : -1;
     id(item.dataset.section).hidden = item !== tab;
   }
+  if (changed) window.scrollTo({top:0});
   if (focus) tab.focus();
   if (tab.dataset.section === "infrastructure") renderProjects();
   if (tab.dataset.section === "saved") renderSavedReviews();
@@ -396,9 +486,13 @@ tabs.forEach((tab, index) => {
 });
 function drawTimeline() {
   const max = Math.max(...data.award.monthly.map(row => row.scored));
+  const monthLabel = id("awardMonthLabel");
+  const monthFormat = new Intl.DateTimeFormat("en",{month:"short",timeZone:"UTC"});
+  const shortMonth = month => monthFormat.format(new Date(month + "-01T00:00:00Z"));
+  monthLabel.textContent = awardState.month ? "Month filter · " + shortMonth(awardState.month) : "Filter by month";
   id("timeline").replaceChildren();
   for (const month of data.award.monthly) {
-    const monthName = new Intl.DateTimeFormat("en",{month:"short",timeZone:"UTC"}).format(new Date(month.month + "-01T00:00:00Z"));
+    const monthName = shortMonth(month.month);
     const button = node("button","","month");
     button.title = monthName + " · " + month.scored + " awards · " + month.reviews + " above cutoff";
     button.setAttribute("aria-label",button.title);
@@ -422,13 +516,17 @@ function drawTimeline() {
     id("timeline").append(button);
   }
 }
+function matchesReviewStatus(kind,d) {
+  const wanted = id(kind + "ReviewStatus").value;
+  return !wanted || wanted === (reviewLog.get(reviewKey(kind,d))?.status || "unreviewed");
+}
 function awardFilter() {
   const term = clean(id("awardSearch").value).trim();
   const category = id("awardCategory").value;
   return data.award.records.filter(d => (
     (!id("flagsOnly").checked || d.review) && (!category || d.category === category) &&
     (!awardState.month || d.award_date.startsWith(awardState.month)) &&
-    (!id("awardLinked").checked || d.bid_reference) &&
+    (!id("awardLinked").checked || d.bid_reference) && matchesReviewStatus("award",d) &&
     (!term || [awardTitle(d),d.award_title,d.awardee_name,d.reference_id,d.contract_no,d.record_id,d.official_award_reference,d.bid_reference].some(item => clean(item).includes(term)))
   ));
 }
@@ -441,7 +539,7 @@ function tenderFilter() {
   const mode = id("tenderMode").value;
   return data.tender.records.filter(d =>
     (!id("tenderFlagsOnly").checked || d.review) &&
-    (!mode || d.mode_group === mode) &&
+    (!mode || d.mode_group === mode) && matchesReviewStatus("tender",d) &&
     (!query || [d.notice_title,d.bid_reference,d.solicitation_number].some(value => clean(value).includes(query)))
   );
 }
@@ -462,24 +560,65 @@ const reviewViews = {
     draw:drawTender
   }
 };
-function renderReview(kind, selected = null, fromClick = false) {
+function showReviewCase(kind) {
+  id(kind + "Layout").dataset.pane = "case";
+  const heading = id(reviewViews[kind].inspector).querySelector(".case-heading");
+  heading?.focus();
+}
+function showReviewQueue(kind) {
+  id(kind + "Layout").dataset.pane = "queue";
+  const selected = id(kind + "Table").querySelector('button[aria-pressed="true"]');
+  (selected || id(kind + "Search")).focus();
+}
+function resetReviewFilters(kind) {
+  id(kind + "Search").value = "";
+  id(kind + "ReviewStatus").value = "";
+  if (kind === "award") {
+    id("awardCategory").value = "";
+    id("flagsOnly").checked = false;
+    id("awardLinked").checked = false;
+    awardState.month = "";
+    drawTimeline();
+  } else {
+    id("tenderMode").value = "";
+    id("tenderFlagsOnly").checked = false;
+  }
+  reviewViews[kind].state.page = 0;
+}
+function refreshReviewStatusQueues() {
+  for (const [kind,view] of Object.entries(reviewViews)) {
+    const control = id(kind + "ReviewStatus");
+    control.disabled = serverReviewMode && reviewConnection !== "connected";
+    if (!control.value) continue;
+    const keys = view.filter().map(d => d[view.key]).join("|");
+    if (keys !== view.state.resultKeys) renderReview(kind,null,false,true);
+  }
+}
+function renderReview(kind, selected = null, fromClick = false, preserveCase = false) {
   const view = reviewViews[kind];
   const state = view.state;
   const filtered = view.filter();
+  state.resultKeys = filtered.map(d => d[view.key]).join("|");
+  state.page = Math.min(state.page,Math.max(0,Math.ceil(filtered.length / reviewPageSize) - 1));
   const first = state.page * reviewPageSize;
   const visible = filtered.slice(first,first + reviewPageSize);
   const active = visible.find(d => d[view.key] === (selected || state.selected)) || visible[0];
-  state.selected = active?.[view.key];
+  if (!preserveCase) state.selected = active?.[view.key];
   const table = id(kind + "Table");
   table.replaceChildren();
+  if (!preserveCase && !fromClick) table.parentElement.closest(".data-scroll").scrollTop = 0;
   for (const d of visible) {
     const chosen = d[view.key] === state.selected;
     const row = node("tr","",chosen ? "active" : "");
     addCell(row,number.format(d.rank),"num");
     const cell = addCell(row,"");
     const button = node("button",view.title(d),"case-button");
+    button.title = view.title(d);
     button.setAttribute("aria-pressed",String(chosen));
     button.onclick = () => renderReview(kind,d[view.key],true);
+    row.onclick = event => {
+      if (!event.target.closest("button")) button.click();
+    };
     const subtitle = node("span",view.secondary(d),"case-sub");
     if (kind === "award" && d.bid_reference) subtitle.append(node("span"," · Linked tender","linked-label"));
     const caseStatus = node("span","","saved-label");
@@ -489,23 +628,23 @@ function renderReview(kind, selected = null, fromClick = false) {
     addCell(row,view.compact(d),"num hide-small");
     addCell(row,d.anomaly_score.toFixed(4),"num");
     table.append(row);
-    if (fromClick && chosen) button.focus({preventScroll:true});
   }
   if (!visible.length) {
     const row = node("tr");
-    addCell(row,"No " + view.verb + " match these filters.").colSpan = 4;
+    const empty = addCell(row,"","empty-state");
+    empty.colSpan = 4;
+    empty.append(node("h3","No " + view.verb + " match"),node("p","Try another search or clear the filters."));
     table.append(row);
   }
   id(kind + "Range").textContent = pageText(state.page,reviewPageSize,filtered.length,view.verb) + (state.month ? " · " + state.month : "");
   id(kind + "Prev").disabled = state.page === 0;
   id(kind + "Next").disabled = first + reviewPageSize >= filtered.length;
-  view.draw(active);
-  paintQueueStatuses(kind);
-  if (fromClick && window.matchMedia("(max-width: 840px)").matches) {
-    id(view.inspector).scrollIntoView({
-      behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",block:"start"
-    });
+  if (!preserveCase) {
+    view.draw(active);
+    if (!active) id(kind + "Layout").dataset.pane = "queue";
   }
+  paintQueueStatuses(kind);
+  if (fromClick && active) showReviewCase(kind);
 }
 function factBlock(items) {
   const dl = node("dl","","case-facts");
@@ -523,14 +662,50 @@ function scoreFacts(d,model) {
   ];
 }
 function reviewBadge(d) {
-  return node("span",d.review ? "Above cutoff" : "Within cutoff","pill " + (d.review ? "amber" : "teal"));
+  return node("span",d.review ? "Flagged for review" : "Below review cutoff","pill " + (d.review ? "amber" : "neutral"));
+}
+function drawCaseHeading(container,kind,d,title,subtitle) {
+  const navigation = node("div","","case-nav");
+  const back = node("button","‹ Back to queue","minor case-back");
+  back.type = "button";
+  back.onclick = () => showReviewQueue(kind);
+  navigation.append(back,reviewBadge(d));
+  const heading = node("h2",title,"case-heading");
+  heading.tabIndex = -1;
+  container.append(navigation,heading,node("p",subtitle,"sub"));
+}
+function drawCaseActions(container,d) {
+  const actions = node("div","","case-actions");
+  const review = node("button","Open review form","minor primary");
+  review.type = "button";
+  review.onclick = () => {
+    const panel = container.querySelector(".review-entry");
+    panel.open = true;
+    panel.scrollIntoView({block:"start"});
+    panel.querySelector('[name="status"]').focus({preventScroll:true});
+  };
+  actions.append(review);
+  if (d.official_notice_link) {
+    const source = externalLink("Open PhilGEPS notice",d.official_notice_link);
+    source.className = "minor";
+    actions.append(source);
+  }
+  container.append(actions);
+}
+function addModelPanel(container,d,model,state,inputs,scenarioConfig) {
+  const details = node("details","","technical-panel");
+  details.append(node("summary",d.scenario ? "Model details and what-if" : "Model details"),
+    factBlock(scoreFacts(d,model)));
+  addExplanation(details,d,model,state,inputs.map(([context]) => context));
+  if (d.scenario) drawScenario(details,d.scenario,model,scenarioConfig);
+  container.append(details);
 }
 function drawVerificationGuide(container,d,model,inputs) {
   const strongest = Math.min(...d.tree_shap);
   if (strongest >= 0) return;
   const index = d.tree_shap.indexOf(strongest);
   const [context,check] = inputs[index];
-  const box = node("div","","source-card");
+  const box = node("div","","source-card verification-guide");
   const reason = node("p","","sub");
   reason.append(node("strong",model.features[index]),
     document.createTextNode(" contributed most toward a higher Isolation Forest score in TreeSHAP."));
@@ -539,7 +714,10 @@ function drawVerificationGuide(container,d,model,inputs) {
 }
 function drawTenderEvidence(container,d) {
   const box = node("div","","source-card");
-  box.append(node("h3","PhilGEPS evidence"));
+  box.append(node("h3","Source records"),factBlock([
+    ["Local contract number",d.contract_no || "Unavailable in archive",true],
+    ["Archive record ID",d.record_id,true]
+  ]));
   if (!d.official_award_reference) {
     box.append(node("p","No official award match in these releases.","sub"));
   } else if (!d.bid_reference) {
@@ -555,27 +733,19 @@ function drawTenderEvidence(container,d) {
       ["Observed award total for tender",money.format(d.observed_official_award_total_php),true]
     ]));
     box.append(node("p","The approved budget applies to the full tender. The observed total covers awards present in the official extracts.","small"));
-    box.append(externalLink("Open PhilGEPS bid notice",d.official_notice_link));
   }
   container.append(box);
 }
 function drawAward(d) {
   const container = id("inspector");
-  container.replaceChildren(node("h2","Award explanation"));
+  container.replaceChildren();
   if (!d) {
-    container.append(node("p","Choose an award from the review queue.","sub"));
+    container.append(node("h2","No award selected"),node("p","Choose an award from the queue.","sub"));
     return;
   }
-  container.append(
-    reviewBadge(d),node("h3",awardTitle(d),"case-title"),
-    node("p",(d.awardee_name || "Vendor unavailable") + " · " + d.category,"sub case-vendor"),
-    factBlock([
-      ["Award date",d.award_date],["Award amount",money.format(d.contract_amount)],
-      ...scoreFacts(d,data.award),
-      ["Local contract number",d.contract_no || "Unavailable in archive",true],
-      ["Archive record ID",d.record_id,true]
-    ])
-  );
+  drawCaseHeading(container,"award",d,awardTitle(d),(d.awardee_name || "Vendor unavailable") + " · " + d.category);
+  drawCaseActions(container,d);
+  container.append(factBlock([["Award amount",money.format(d.contract_amount)],["Award date",d.award_date]]));
   const inputs = [
     [money.format(d.contract_amount) + " award · " + money.format(d.peer_median_php) +
       " recent median (" + d.peer_scope.toLowerCase() + ")",
@@ -592,8 +762,7 @@ function drawAward(d) {
   drawVerificationGuide(container,d,data.award,inputs);
   drawTenderEvidence(container,d);
   drawCaseReview(container,"award",d);
-  addExplanation(container,d,data.award,awardState,inputs.map(([context]) => context));
-  if (d.scenario) drawScenario(container,d.scenario,data.award,{
+  addModelPanel(container,d,data.award,awardState,inputs,{
     title:"What if the award amount changed?",
     eligibility:"This category has too few training awards to compare amounts.",
     guidance:"Test amounts observed in the same business category.",
@@ -608,14 +777,13 @@ function openRelatedTender(d) {
   if (index < 0) {
     id("tenderSearch").value = d.solicitation_number.trim();
     id("tenderMode").value = "";
+    id("tenderReviewStatus").value = "";
     id("tenderFlagsOnly").checked = false;
     index = tenderFilter().indexOf(d);
   }
   tenderState.page = Math.floor(index / reviewPageSize);
   renderReview("tender",d.bid_reference);
-  const heading = id("tenderInspector").querySelector("h2");
-  heading.tabIndex = -1;
-  heading.focus();
+  showReviewCase("tender");
 }
 function drawRelatedNotices(container,d) {
   const group = tendersBySolicitation.get(solicitationKey(d));
@@ -650,24 +818,18 @@ function drawRelatedNotices(container,d) {
 }
 function drawTender(d) {
   const container = id("tenderInspector");
-  container.replaceChildren(node("h2","Tender explanation"));
+  container.replaceChildren();
   if (!d) {
-    container.append(node("p","Choose a tender from the review queue.","sub"));
+    container.append(node("h2","No tender selected"),node("p","Choose a tender from the queue.","sub"));
     return;
   }
-  container.append(
-    reviewBadge(d),node("h3",d.notice_title || "Untitled tender","case-title"),
-    node("p",d.procurement_mode + " · " + d.classification,"sub case-vendor"),
-    factBlock([
-      ["Official bid ID",d.bid_reference],["Solicitation number",d.solicitation_number || "Unavailable"],
-      ["Approved budget (ABC)",money.format(d.approved_budget_php)],
-      ["Bid window",number.format(d.notice_window_days) + " days"],
-      ["Published",d.published_date],["Closing date in snapshot",d.closing_date],
-      ...scoreFacts(d,data.tender),
-      ["Status in the extract",d.bid_notice_status || "Unavailable"],
-      ["Awards in official extracts",number.format(d.observed_official_awards)]
-    ])
-  );
+  drawCaseHeading(container,"tender",d,d.notice_title || "Untitled tender",d.procurement_mode + " · " + d.classification);
+  drawCaseActions(container,d);
+  container.append(factBlock([
+    ["Approved budget (ABC)",money.format(d.approved_budget_php)],
+    ["Bid window",number.format(d.notice_window_days) + " days"],
+    ["Published",d.published_date],["Closing date in snapshot",d.closing_date]
+  ]));
   const inputs = [
     [money.format(d.approved_budget_php) + " approved budget · " + money.format(d.budget_peer_median_php) +
       " recent median (" + d.budget_peer_group.toLowerCase() + ")",
@@ -684,7 +846,11 @@ function drawTender(d) {
   ];
   drawVerificationGuide(container,d,data.tender,inputs);
   const box = node("div","","source-card");
-  box.append(node("h3","Source record"),externalLink("Open PhilGEPS bid notice",d.official_notice_link));
+  box.append(node("h3","Source record"),factBlock([
+    ["Official bid ID",d.bid_reference],["Solicitation number",d.solicitation_number || "Unavailable"],
+    ["Status in snapshot",d.bid_notice_status || "Unavailable"],
+    ["Awards in official extracts",number.format(d.observed_official_awards)]
+  ]));
   box.append(node("p","Check the current notice and any bid bulletins before recording a review.","small"));
   if (d.observed_official_awards === 0) {
     box.append(node("p","Award details are unavailable in these releases for this tender.","small"));
@@ -692,8 +858,7 @@ function drawTender(d) {
   container.append(box);
   drawRelatedNotices(container,d);
   drawCaseReview(container,"tender",d);
-  addExplanation(container,d,data.tender,tenderState,inputs.map(([context]) => context));
-  if (d.scenario) drawScenario(container,d.scenario,data.tender,{
+  addModelPanel(container,d,data.tender,tenderState,inputs,{
     title:"What if the bid window changed?",
     eligibility:"This mode has too few training tenders to compare bid windows.",
     guidance:"Test window lengths observed in the same procurement mode.",
@@ -1089,15 +1254,23 @@ function persistReviews(entries) {
   updateReviewViews();
 }
 
+function syncServerReviewForms() {
+  for (const view of Object.values(reviewViews)) {
+    id(view.inspector).querySelector(".review-entry form")?.dispatchEvent(new Event("reviewstorechange"));
+  }
+}
+
 function updateReviewViews() {
+  renderSavedReviews();
   paintQueueStatuses("award");
   paintQueueStatuses("tender");
-  renderSavedReviews();
-  if (serverReviewMode) {
-    for (const view of Object.values(reviewViews)) {
-      id(view.inspector).querySelector(".review-entry form")?.dispatchEvent(new Event("reviewstorechange"));
-    }
-  }
+  if (typeof refreshReviewStatusQueues === "function") refreshReviewStatusQueues();
+  if (serverReviewMode) syncServerReviewForms();
+}
+
+function showReviewDatabaseUnavailable() {
+  reviewConnection = "unavailable";
+  updateReviewViews();
 }
 
 async function requestServerReviews(update) {
@@ -1108,15 +1281,11 @@ async function requestServerReviews(update) {
     }) : await fetch("/api/reviews?snapshot_id=" + encodeURIComponent(data.snapshot_id),{cache:"no-store"});
     payload = await response.json();
   } catch {
-    reviewConnection = "unavailable";
-    renderSavedReviews();
+    showReviewDatabaseUnavailable();
     throw new Error("Could not reach the app’s reviews database. Try again.");
   }
   if (!response.ok) {
-    if (response.status >= 500 || reviewRevision === null) {
-      reviewConnection = "unavailable";
-      renderSavedReviews();
-    }
+    if (!update || response.status >= 500 || reviewRevision === null) showReviewDatabaseUnavailable();
     const error = new Error(typeof payload?.error === "string" ? payload.error : "The reviews database rejected the request.");
     error.status = response.status;
     throw error;
@@ -1126,8 +1295,7 @@ async function requestServerReviews(update) {
     if (!Number.isSafeInteger(payload?.revision) || payload.revision < 0) throw new Error();
     entries = parseReviews(payload);
   } catch {
-    reviewConnection = "unavailable";
-    renderSavedReviews();
+    showReviewDatabaseUnavailable();
     throw new Error("The app returned an invalid review state. Reload and try again.");
   }
   if (reviewRevision === null || payload.revision >= reviewRevision) {
@@ -1160,13 +1328,8 @@ function paintQueueStatuses(kind) {
   }
 }
 
-function reviewInput(form,input,label,name,value,long = false) {
-  const wrapper = node("label",label,long ? "full" : "");
-  input.name = name;
-  input.value = value;
-  if (name in reviewLimits) input.maxLength = reviewLimits[name];
-  wrapper.append(input);
-  form.append(wrapper);
+function reviewNeedsEvidence(status) {
+  return status === "reviewed" || status === "follow_up";
 }
 
 function reviewFields(entry) {
@@ -1199,41 +1362,98 @@ function drawCaseReview(container,kind,d) {
   const panel = node("details","","review-entry");
   panel.open = Boolean(draft);
   const summary = node("summary");
+  const savedState = node("span","","review-entry-state");
+  summary.append(node("span","Review case","review-entry-title")," ",savedState);
   const form = node("form");
+  form.noValidate = true;
+  const addInput = (target,input,label,name,full = false) => {
+    const wrapper = node("label","",full ? "full" : "");
+    const labelLine = node("span","","review-field-label");
+    const title = node("span",label);
+    title.id = kind + "-review-label-" + name;
+    const required = node("span","Required","review-required");
+    required.setAttribute("aria-hidden","true");
+    required.hidden = true;
+    labelLine.append(title," ",required);
+    input.name = name;
+    input.value = entered[name];
+    input.setAttribute("aria-labelledby",title.id);
+    if (name in reviewLimits) input.maxLength = reviewLimits[name];
+    wrapper.append(labelLine,input);
+    target.append(wrapper);
+    return required;
+  };
   const status = node("select");
   reviewStatuses.forEach((label,value) => option(status,label,value));
-  reviewInput(form,status,"Review status","status",entered.status);
+  addInput(form,status,"Review status","status");
   const reviewer = node("input");
-  reviewInput(form,reviewer,"Reviewer initials","reviewer",entered.reviewer);
+  const reviewerRequired = addInput(form,reviewer,"Reviewer initials","reviewer");
+  const statusHint = node("p","","small review-status-hint full");
+  statusHint.id = kind + "-review-status-hint";
+  status.setAttribute("aria-describedby",statusHint.id);
+  form.append(statusHint);
+  const evidenceGroup = node("fieldset","","review-evidence full");
+  const evidenceLegend = node("legend","Evidence");
+  const evidenceRequired = node("span","One required","review-required");
+  evidenceLegend.append(" ",evidenceRequired);
+  const evidenceFields = node("div","","review-evidence-fields");
   const evidence = node("input");
   evidence.type = "url";
   evidence.placeholder = "https://";
-  reviewInput(form,evidence,"Evidence link","evidence_url",entered.evidence_url,true);
+  addInput(evidenceFields,evidence,"HTTPS evidence link","evidence_url");
   const reference = node("input");
-  reviewInput(form,reference,"Internal document reference","evidence_ref",entered.evidence_ref,true);
+  reference.placeholder = "Document ID or file number";
+  addInput(evidenceFields,reference,"Internal document reference","evidence_ref");
+  evidenceGroup.append(evidenceLegend,evidenceFields);
   const notes = node("textarea");
   notes.rows = 3;
-  notes.placeholder = "What did you verify, or which document is still needed?";
-  reviewInput(form,notes,"Notes","notes",entered.notes,true);
+  const notesRequired = addInput(form,notes,"Notes","notes",true);
+  form.append(evidenceGroup);
   const save = node("button","Save review","minor primary");
   save.type = "submit";
   const discard = node("button","Discard draft","minor");
   discard.type = "button";
   const actions = node("div","","actions full");
-  const pending = node("p","Unsaved changes are kept on this page until you save or discard them.","small full");
+  const footer = node("div","","review-form-footer full");
+  const pending = node("p","Unsaved draft. Save it before closing this page.","small review-draft-notice");
   const feedback = node("p","","small review-feedback full");
+  feedback.id = kind + "-review-form-feedback";
   feedback.setAttribute("role","status");
+  const connection = node("div","","review-database-notice");
+  connection.hidden = true;
+  const retry = node("button","Retry connection","minor");
+  retry.type = "button";
+  connection.append(node("p","Database unavailable. Drafts stay on this page.","small"),retry);
   actions.append(save,discard);
-  form.append(actions,pending,feedback);
-  const source = node("p","For Reviewed and Follow up, enter your initials, explain your decision in Notes, and add an evidence link or internal document reference.","small");
-  panel.append(summary,source,form);
+  footer.append(pending,connection,actions,feedback);
+  form.append(footer);
+  panel.append(summary,form);
   container.append(panel);
 
   const fieldNames = Object.keys(entered);
   const readFields = () => Object.fromEntries(fieldNames.map(name => [name,form.elements[name].value]));
+  const syncRequirements = () => {
+    const needsEvidence = reviewNeedsEvidence(status.value);
+    reviewer.required = notes.required = needsEvidence;
+    reviewerRequired.hidden = notesRequired.hidden = evidenceRequired.hidden = !needsEvidence;
+    const hints = {
+      in_review:"Log that you have started checking this case.",
+      needs_documents:"Note which documents you still need.",
+      reviewed:"Summarize what you verified and add an evidence link or internal document reference.",
+      follow_up:"Record the next action and add an evidence link or internal document reference."
+    };
+    statusHint.textContent = hints[status.value];
+  };
+  const clearFieldErrors = () => {
+    for (const field of [reviewer,notes,evidence,reference]) {
+      field.removeAttribute("aria-invalid");
+      field.removeAttribute("aria-errormessage");
+    }
+  };
   const showDraftState = dirty => {
-    const label = original ? "Review · " + reviewStatuses.get(original.status) : "Record review";
-    summary.textContent = label + (dirty ? " · Unsaved draft" : "");
+    panel.dataset.reviewState = dirty ? "draft" : original ? "saved" : "not-started";
+    savedState.dataset.state = panel.dataset.reviewState;
+    savedState.textContent = dirty ? "Unsaved draft" : original ? "Saved · " + reviewStatuses.get(original.status) : "Not started";
     discard.hidden = pending.hidden = !dirty;
   };
   const resetForm = saved => {
@@ -1241,64 +1461,107 @@ function drawCaseReview(container,kind,d) {
     const fields = reviewFields(saved);
     for (const name of fieldNames) form.elements[name].value = fields[name];
     setReviewDraft(key,null);
+    clearFieldErrors();
+    syncRequirements();
     showDraftState(false);
   };
-  const setSaveMessage = message => {
-    if (serverReviewMode) reviewSaveMessages.set(key,message);
-    feedback.textContent = message;
+  const paintFeedback = ({message = "",tone = ""} = {}) => {
+    feedback.dataset.state = tone;
+    if (feedback.textContent !== message) feedback.textContent = message;
   };
+  const setSaveMessage = (message,tone = "") => {
+    const result = {message,tone};
+    if (serverReviewMode) {
+      if (message) reviewSaveMessages.set(key,result);
+      else reviewSaveMessages.delete(key);
+    }
+    paintFeedback(result);
+  };
+  let reconnecting = false;
   const syncServerForm = () => {
     const saving = reviewSaves.has(key);
     for (const control of form.elements) control.disabled = saving;
+    connection.hidden = reviewConnection !== "unavailable";
+    retry.disabled = saving || reconnecting;
     const saved = loadReviews().get(key);
     if (!saving && !reviewDrafts.has(key) && !sameReview(saved,original)) resetForm(saved);
-    feedback.textContent = reviewSaveMessages.get(key) ?? "";
+    paintFeedback(reviewSaveMessages.get(key));
   };
+  syncRequirements();
   showDraftState(Boolean(draft));
   if (serverReviewMode) {
     form.addEventListener("reviewstorechange",syncServerForm);
     syncServerForm();
+    retry.onclick = async () => {
+      reconnecting = true;
+      setSaveMessage("Checking the app database…","pending");
+      syncServerForm();
+      try {
+        await requestServerReviews();
+        setSaveMessage("App database connection restored.","success");
+        if (form.isConnected) save.focus({preventScroll:true});
+      } catch (error) {
+        setSaveMessage(error.message,"error");
+      } finally {
+        reconnecting = false;
+        syncServerForm();
+      }
+    };
   }
-  form.addEventListener("input",() => {
+  form.addEventListener("input",event => {
     const fields = readFields();
     const dirty = !sameReview(fields,reviewFields(original));
     setReviewDraft(key,dirty ? {original,fields} : null);
     showDraftState(dirty);
-    if (serverReviewMode) setSaveMessage("");
+    if (event.target === status) syncRequirements();
+    clearFieldErrors();
+    setSaveMessage("");
   });
   discard.onclick = () => {
     resetForm(loadReviews().get(key));
-    setSaveMessage("Draft discarded.");
+    setSaveMessage("Draft discarded.","notice");
     notes.focus();
+  };
+  const showFieldError = (fields,message) => {
+    for (const field of fields) {
+      field.setAttribute("aria-invalid","true");
+      field.setAttribute("aria-errormessage",feedback.id);
+    }
+    setSaveMessage(message,"error");
+    fields[0].focus();
   };
   form.addEventListener("submit",async event => {
     event.preventDefault();
     if (reviewSaves.has(key)) return;
+    clearFieldErrors();
     const fields = Object.fromEntries(Object.entries(readFields()).map(([name,value]) => [name,value.trim()]));
     if (evidenceLink(fields.evidence_url) === null) {
-      setSaveMessage("Use an HTTPS evidence link, or leave that field blank.");
-      evidence.focus();
+      showFieldError([evidence],"Use an HTTPS evidence link, or clear the link field.");
       return;
     }
-    if ((fields.status === "reviewed" || fields.status === "follow_up") &&
-        (!fields.reviewer || !fields.notes || (!fields.evidence_url && !fields.evidence_ref))) {
-      setSaveMessage("Enter your initials, explain your decision in Notes, and add an evidence link or internal document reference.");
-      const missing = !fields.reviewer ? reviewer : !fields.notes ? notes : reference;
-      missing.focus();
-      return;
+    if (reviewNeedsEvidence(fields.status)) {
+      const missing = new Map();
+      if (!fields.reviewer) missing.set(reviewer,"your initials");
+      if (!fields.notes) missing.set(notes,"notes explaining your decision");
+      if (!fields.evidence_url && !fields.evidence_ref) missing.set(reference,"an evidence link or internal document reference");
+      if (missing.size) {
+        const labels = new Intl.ListFormat("en-PH").format(missing.values());
+        showFieldError([...missing.keys()],"Enter " + labels + ".");
+        return;
+      }
     }
     if (serverReviewMode) {
       reviewSaves.add(key);
-      setSaveMessage("Saving review…");
+      setSaveMessage("Saving review…","pending");
       syncServerForm();
     }
     const warnIfCaseChanged = saved => {
       if (sameReview(saved,original)) return false;
       if (reviewDrafts.has(key)) {
-        setSaveMessage("The saved review changed. Copy any draft text you need, then discard the draft to load the latest saved review.");
+        setSaveMessage("The saved review changed. Copy any draft text you need, then discard the draft to load the latest saved review.","error");
       } else {
         resetForm(saved);
-        setSaveMessage("The saved review changed. The latest version is shown here.");
+        setSaveMessage("The saved review changed. The latest version is shown here.","notice");
       }
       return true;
     };
@@ -1309,13 +1572,13 @@ function drawCaseReview(container,kind,d) {
       const next = await persistReviewChanges(state,[saved],"edit");
       resetForm(next.entries.get(key));
       setSaveMessage(serverReviewMode ? "Review saved in the app database." : reviewStore ?
-        "Review saved in this browser." : "Review saved for this session. Download a backup in Saved reviews before closing.");
+        "Review saved in this browser." : "Review saved for this session. Download a backup in Saved reviews before closing.","success");
     } catch (error) {
       if (error.status === 409) {
         await requestServerReviews().catch(() => {});
         if (warnIfCaseChanged(loadReviews().get(key))) return;
       }
-      setSaveMessage("Review could not be saved. " + error.message);
+      setSaveMessage("Review could not be saved. " + error.message,"error");
     } finally {
       if (serverReviewMode) {
         reviewSaves.delete(key);
@@ -1328,6 +1591,8 @@ function drawCaseReview(container,kind,d) {
 function openSavedReview(key) {
   const {kind,d} = reviewRecords.get(key);
   const view = reviewViews[kind];
+  const statusFilter = id(kind + "ReviewStatus");
+  if (statusFilter) statusFilter.value = "";
   if (kind === "award") {
     id("awardSearch").value = "";
     id("awardCategory").value = "";
@@ -1343,6 +1608,7 @@ function openSavedReview(key) {
   selectTab(id(view.verb + "-tab"));
   view.state.page = Math.floor(data[kind].records.indexOf(d) / reviewPageSize);
   renderReview(kind,d[view.key]);
+  if (typeof showReviewCase === "function") showReviewCase(kind);
   const panel = id(view.inspector).querySelector(".review-entry");
   panel.open = true;
   panel.querySelector("summary").focus();
@@ -1368,6 +1634,17 @@ function renderSavedReviews() {
   id("reviewStorage").textContent = serverReviewMode ? connectionMessages[reviewConnection] : reviewStore ?
     "Reviews are saved in this browser for this data snapshot. Download a backup to resume on another device." :
     "Browser storage is unavailable. Download a backup before closing this page.";
+  const appConnection = id("appConnection");
+  if (appConnection) {
+    const states = {
+      connecting:["connecting","Connecting"],connected:["ready","Database ready"],
+      unavailable:["unavailable","Database unavailable"]
+    };
+    const [state,message] = serverReviewMode ? states[reviewConnection] : reviewStore ?
+      ["browser","Browser storage"] : ["session","Session only"];
+    appConnection.dataset.state = state;
+    if (appConnection.textContent !== message) appConnection.textContent = message;
+  }
   id("reviewCsv").disabled = id("reviewBackup").disabled = !serverReviewMode && entries.length === 0;
   for (const entry of visible) {
     const {kind,d} = reviewRecords.get(entry.key);
@@ -1531,10 +1808,14 @@ function initializeReviewWorkflow() {
     }
   }
   const snapshot = data.coverage;
-  id("snapshotBanner").textContent = "Retrospective snapshot " + data.snapshot_id.slice(0,12) +
-    " · Official tenders through " + snapshot.latest_tender_publication_date +
-    " · Official awards through " + snapshot.latest_official_award_date +
-    ". Confirm current status and deadlines in the official notice and amendments.";
+  const coverageDate = new Intl.DateTimeFormat("en-PH",{dateStyle:"medium",timeZone:"UTC"});
+  const snapshotBanner = id("snapshotBanner");
+  snapshotBanner.title = "Snapshot " + data.snapshot_id.slice(0,12);
+  snapshotBanner.replaceChildren(node("strong","Historical data"),document.createTextNode(
+    " · Tenders through " + coverageDate.format(new Date(snapshot.latest_tender_publication_date + "T00:00:00Z")) +
+    " · Official awards through " + coverageDate.format(new Date(snapshot.latest_official_award_date + "T00:00:00Z")) +
+    ". Confirm current deadlines in the official notice."
+  ));
   reviewStatuses.forEach((label,value) => option(id("savedStatus"),label,value));
   id("savedStatus").onchange = renderSavedReviews;
   id("reviewStorage").setAttribute("role","status");
@@ -1601,10 +1882,11 @@ id("tenderCount").textContent = number.format(data.tender.records.length);
 id("tenderFlagCount").textContent = number.format(data.tender.metrics.n_flags);
 id("allTenderCount").textContent = number.format(data.coverage.official_tenders);
 for (const [kind, controls] of [
-  ["award",["awardSearch","awardCategory","flagsOnly","awardLinked"]],
-  ["tender",["tenderSearch","tenderMode","tenderFlagsOnly"]]
+  ["award",["awardSearch","awardCategory","awardReviewStatus","flagsOnly","awardLinked"]],
+  ["tender",["tenderSearch","tenderMode","tenderReviewStatus","tenderFlagsOnly"]]
 ]) {
   const state = reviewViews[kind].state;
+  reviewStatuses.forEach((label,value) => option(id(kind + "ReviewStatus"),label,value));
   for (const name of controls) {
     id(name).addEventListener(name.endsWith("Search") ? "input" : "change",() => {
       state.page = 0;
@@ -1613,6 +1895,7 @@ for (const [kind, controls] of [
   }
   id(kind + "Prev").onclick = () => {state.page--;renderReview(kind);};
   id(kind + "Next").onclick = () => {state.page++;renderReview(kind);};
+  id(kind + "Reset").onclick = () => {resetReviewFilters(kind);renderReview(kind);};
 }
 ["dpwhSearch","dpwhBarangay","dpwhSort","dpwhFlood"].forEach(control => id(control).addEventListener(
   control === "dpwhSearch" ? "input" : "change",
@@ -1623,6 +1906,7 @@ id("dpwhNext").onclick = () => {projectState.page++;renderProjects();};
 id("awardValidation").onclick = () => renderValidation("award");
 id("tenderValidation").onclick = () => renderValidation("tender");
 initializeReviewWorkflow();
+refreshReviewStatusQueues();
 drawTimeline();
 renderReview("award");
 renderReview("tender");
