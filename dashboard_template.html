@@ -78,6 +78,10 @@ tr.active td{background:#eff9f6}
 .review-entry .primary{background:var(--teal);color:white;border-color:var(--teal);font-weight:650}
 .saved-label{color:#165f58;font-weight:700}
 .review-feedback{line-height:1.4;min-height:1.35em}
+.review-comparison{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:16px;margin-top:8px}
+.review-comparison dl{margin:0}
+.review-comparison dt{margin-top:6px;font-weight:650}
+.review-comparison dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}
 .saved-notice{margin:7px 0}
 .saved-table th:first-child{min-width:180px}
 .pill{display:inline-block;font-size:.72rem;font-weight:750;border-radius:999px;padding:2px 7px;line-height:1.4;white-space:nowrap}
@@ -112,6 +116,10 @@ tr.active td{background:#eff9f6}
 .source-card .case-facts{border-bottom:0}
 .source-card a{display:inline-block;margin-top:6px;font-size:.83rem}
 .source-card .small{margin-top:6px}
+.related-notices{list-style:none;margin:8px 0 0;padding:0}
+.related-notices li{border-top:1px solid var(--line);padding:8px 0}
+.related-notices .actions{justify-content:flex-start;flex-wrap:wrap;margin-top:6px}
+.related-notices .actions a{margin-top:0}
 .source-methods{margin:14px 0 13px}
 .linked-label{color:var(--teal);font-weight:700}
 .map-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,1fr);gap:15px;margin-top:15px;align-items:start}
@@ -198,7 +206,7 @@ footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 17px}
   <div class="review-layout">
     <section class="card">
       <h2>Tender review queue</h2>
-      <p class="sub">The screen uses the approved budget, bid window, procurement mode, classification and publication timing.</p>
+      <p class="sub">Review notices from the snapshot. For newer notices and awards, open the <a href="https://philgeps.gov.ph/Indexes/index" target="_blank" rel="noopener noreferrer">modernized PhilGEPS Bulletin Board</a>.</p>
       <div class="controls">
         <label class="search">Find a tender<input id="tenderSearch" type="search" placeholder="Title, bid ID or solicitation"></label>
         <label>Procurement mode<select id="tenderMode"><option value="">All modes</option></select></label>
@@ -229,6 +237,7 @@ footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 17px}
       <input hidden id="reviewFile" type="file" accept=".json,application/json" aria-label="Choose a review backup">
     </div>
     <p class="small review-feedback" id="reviewFeedback" role="status"></p>
+    <div id="reviewConflicts"></div>
     <div class="controls">
       <label>Review status<select id="savedStatus"><option value="">All statuses</option></select></label>
     </div>
@@ -328,7 +337,7 @@ const pct = (value, digits = 1) => (value * 100).toFixed(digits) + "%";
 const projectPageSize = 10;
 const tabs = Array.from(document.querySelectorAll(".tab"));
 const methods = [
-  {label:"TreeSHAP", key:"tree_shap", help:"Negative contributions shorten the model's isolation path. Positive contributions lengthen it."},
+  {label:"TreeSHAP", key:"tree_shap", help:"Negative contributions shorten the isolation path and raise the Isolation Forest score. Positive contributions lengthen the path and lower the score."},
   {label:"Local-DIFFI", key:"local_diffi", help:"Higher values point to features often used on shorter paths in the original forest."},
   {label:"ExIFFI", key:"exiffi", help:"Higher values identify features emphasized by oblique splits in Extended Isolation Forest."}
 ];
@@ -349,6 +358,14 @@ const option = (select, label, value = label) => {
 };
 const signed = (n, digits) => (n > 0 ? "+" : "") + n.toFixed(digits);
 const clean = value => String(value || "").toLocaleLowerCase();
+const solicitationKey = d => clean(d.solicitation_number).trim();
+const tendersBySolicitation = new Map();
+for (const d of data.tender.records) {
+  const key = solicitationKey(d);
+  if (!key) continue;
+  if (!tendersBySolicitation.has(key)) tendersBySolicitation.set(key,[]);
+  tendersBySolicitation.get(key).push(d);
+}
 const awardTitle = d => d.notice_title || d.award_title || "Untitled award";
 const externalLink = (label, url) => {
   const link = node("a",label);
@@ -508,6 +525,18 @@ function scoreFacts(d,model) {
 function reviewBadge(d) {
   return node("span",d.review ? "Above cutoff" : "Within cutoff","pill " + (d.review ? "amber" : "teal"));
 }
+function drawVerificationGuide(container,d,model,inputs) {
+  const strongest = Math.min(...d.tree_shap);
+  if (strongest >= 0) return;
+  const index = d.tree_shap.indexOf(strongest);
+  const [context,check] = inputs[index];
+  const box = node("div","","source-card");
+  const reason = node("p","","sub");
+  reason.append(node("strong",model.features[index]),
+    document.createTextNode(" contributed most toward a higher Isolation Forest score in TreeSHAP."));
+  box.append(node("h3","What to verify first"),reason,node("p",context,"small"),node("p",check,"small"));
+  container.append(box);
+}
 function drawTenderEvidence(container,d) {
   const box = node("div","","source-card");
   box.append(node("h3","PhilGEPS evidence"));
@@ -547,15 +576,23 @@ function drawAward(d) {
       ["Archive record ID",d.record_id,true]
     ])
   );
+  const inputs = [
+    [money.format(d.contract_amount) + " award · " + money.format(d.peer_median_php) +
+      " recent median (" + d.peer_scope.toLowerCase() + ")",
+      "Check the signed award or contract for the amount and scope. Compare with awards for similar work."],
+    [d.vendor_share_pct.toFixed(2) + "% of prior 365-day award rows",
+      "Confirm the awardee’s identity and check which earlier award records belong to the same supplier."],
+    [number.format(d.vendor_category_30d) + " award rows for this vendor and category in the prior 30 days",
+      "Pull the related award records or purchase orders. Check the vendor, dates, and scope, and distinguish separate awards from duplicate rows."],
+    [number.format(d.days_to_quarter_end) + " calendar days to quarter end",
+      "Verify the award date against the dated award document or notice."],
+    [number.format(d.category_365d) + " award rows in the category in the prior 365 days",
+      "Confirm the work belongs in the recorded category and check the related entries in the award register."]
+  ];
+  drawVerificationGuide(container,d,data.award,inputs);
   drawTenderEvidence(container,d);
   drawCaseReview(container,"award",d);
-  addExplanation(container,d,data.award,awardState,[
-    money.format(d.peer_median_php) + " median · " + d.peer_scope.toLowerCase(),
-    d.vendor_share_pct.toFixed(2) + "% of prior 365-day awards",
-    number.format(d.vendor_category_30d) + " in prior 30 days",
-    number.format(d.days_to_quarter_end) + " calendar days",
-    number.format(d.category_365d) + " in prior 365 days"
-  ]);
+  addExplanation(container,d,data.award,awardState,inputs.map(([context]) => context));
   if (d.scenario) drawScenario(container,d.scenario,data.award,{
     title:"What if the award amount changed?",
     eligibility:"This category has too few training awards to compare amounts.",
@@ -565,6 +602,51 @@ function drawAward(d) {
     field:"amount",
     format:x => money.format(x)
   });
+}
+function openRelatedTender(d) {
+  let index = tenderFilter().indexOf(d);
+  if (index < 0) {
+    id("tenderSearch").value = d.solicitation_number.trim();
+    id("tenderMode").value = "";
+    id("tenderFlagsOnly").checked = false;
+    index = tenderFilter().indexOf(d);
+  }
+  tenderState.page = Math.floor(index / reviewPageSize);
+  renderReview("tender",d.bid_reference);
+  const heading = id("tenderInspector").querySelector("h2");
+  heading.tabIndex = -1;
+  heading.focus();
+}
+function drawRelatedNotices(container,d) {
+  const group = tendersBySolicitation.get(solicitationKey(d));
+  if (!group || group.length < 2) return;
+
+  const box = node("div","","source-card");
+  const list = node("ul","","related-notices");
+  box.append(node("h3","Other notices with this solicitation"));
+  box.append(node("p","Compare these scored notices from the snapshot. Check the official notices to confirm whether they are reposts or separate lots.","small"));
+  const related = group.filter(row => row.bid_reference !== d.bid_reference)
+    .sort((a,b) => a.published_date.localeCompare(b.published_date) || a.bid_reference.localeCompare(b.bid_reference));
+  for (const row of related) {
+    const item = node("li");
+    const details = [
+      "Published " + row.published_date,
+      "Closing date " + row.closing_date,
+      money.format(row.approved_budget_php) + " approved budget",
+      (row.bid_notice_status || "Status unavailable") + " in snapshot"
+    ];
+    const open = node("button","Review bid " + row.bid_reference,"minor");
+    open.type = "button";
+    open.onclick = () => openRelatedTender(row);
+    const actions = node("div","","actions");
+    actions.append(open);
+    if (row.official_notice_link) actions.append(externalLink("PhilGEPS notice " + row.bid_reference,row.official_notice_link));
+    item.append(node("strong",row.notice_title || "Untitled tender"),
+      node("p",details.join(" · "),"small"),actions);
+    list.append(item);
+  }
+  box.append(list);
+  container.append(box);
 }
 function drawTender(d) {
   const container = id("tenderInspector");
@@ -580,12 +662,27 @@ function drawTender(d) {
       ["Official bid ID",d.bid_reference],["Solicitation number",d.solicitation_number || "Unavailable"],
       ["Approved budget (ABC)",money.format(d.approved_budget_php)],
       ["Bid window",number.format(d.notice_window_days) + " days"],
-      ["Published",d.published_date],["Closing date",d.closing_date],
+      ["Published",d.published_date],["Closing date in snapshot",d.closing_date],
       ...scoreFacts(d,data.tender),
       ["Status in the extract",d.bid_notice_status || "Unavailable"],
       ["Awards in official extracts",number.format(d.observed_official_awards)]
     ])
   );
+  const inputs = [
+    [money.format(d.approved_budget_php) + " approved budget · " + money.format(d.budget_peer_median_php) +
+      " recent median (" + d.budget_peer_group.toLowerCase() + ")",
+      "Compare the approved budget and scope in the published notice, then check for amendments to either."],
+    [number.format(d.notice_window_days) + " days observed · " + number.format(d.window_peer_median_days) +
+      " days recent median (" + d.window_peer_group.toLowerCase() + ")",
+      "Check the publication date and bid submission deadline in the notice and bulletins. Compare submission and bid opening times separately."],
+    [d.prior_mode_share.toFixed(2) + "% of prior 365-day tenders in this mode group",
+      "Verify the published procurement mode, then check the earlier notices used to compare that mode."],
+    [d.prior_class_share.toFixed(2) + "% of prior 365-day tenders in this classification",
+      "Check the published classification against the scope of work and compare it with similar notices."],
+    [number.format(d.days_to_quarter_end) + " calendar days to quarter end",
+      "Confirm the original publication date against the official notice or posting record."]
+  ];
+  drawVerificationGuide(container,d,data.tender,inputs);
   const box = node("div","","source-card");
   box.append(node("h3","Source record"),externalLink("Open PhilGEPS bid notice",d.official_notice_link));
   box.append(node("p","Check the current notice and any bid bulletins before recording a review.","small"));
@@ -593,14 +690,9 @@ function drawTender(d) {
     box.append(node("p","Award details are unavailable in these releases for this tender.","small"));
   }
   container.append(box);
+  drawRelatedNotices(container,d);
   drawCaseReview(container,"tender",d);
-  addExplanation(container,d,data.tender,tenderState,[
-    money.format(d.budget_peer_median_php) + " median · " + d.budget_peer_group.toLowerCase(),
-    d.window_peer_median_days + " days median · " + d.window_peer_group.toLowerCase(),
-    d.prior_mode_share.toFixed(2) + "% of prior 365-day tenders",
-    d.prior_class_share.toFixed(2) + "% of prior 365-day tenders",
-    number.format(d.days_to_quarter_end) + " calendar days"
-  ]);
+  addExplanation(container,d,data.tender,tenderState,inputs.map(([context]) => context));
   if (d.scenario) drawScenario(container,d.scenario,data.tender,{
     title:"What if the bid window changed?",
     eligibility:"This mode has too few training tenders to compare bid windows.",

@@ -23,7 +23,7 @@ The release archive has a top-level `Bantay_Kontrata_Tagum` folder. Use this fol
 
 To create the Colab archive from a committed checkout, run this from the repository root.
 
-    git archive --format=zip --prefix=Bantay_Kontrata_Tagum/ --output=../Bantay_Kontrata_Tagum.zip HEAD
+    git -c core.autocrlf=false archive --format=zip --prefix=Bantay_Kontrata_Tagum/ --output=../Bantay_Kontrata_Tagum.zip HEAD
 
 | Path | Contents |
 |---|---|
@@ -38,9 +38,11 @@ Use the commands above from the repository root. The field guide also works with
 ## Review a real case
 
 1. Open **Award review** or **Tender review** and select a record. Use **Above cutoff** to focus on model flags. Clear it to examine records below the cutoff.
-2. Open the PhilGEPS notice when linked. Compare the buyer, bid ID, mode, budget, and dates. Check amendments and individual award documents before drawing conclusions. If an old notice cannot be opened, use the bid ID or solicitation number to locate a copy. For archive-only awards, also record the archive record ID and any available local contract number.
-3. Open **Record review**, choose a status, and record the evidence checked or missing. Add the document link or identifier and reviewer initials where appropriate. **Follow up** records a local status for your workflow.
-4. Use **Saved reviews** to reopen a case or export all recorded decisions to CSV. Download a JSON backup at the end of a session. Keep the matching dashboard HTML with it. Use **Import backup** on that dashboard to resume on another browser or device. Imports add missing reviews and keep existing entries for the same case.
+2. When **What to verify first** appears, use it to see the input that contributed most toward a higher score and the documents to check. Open the PhilGEPS notice when linked. Compare the buyer, bid ID, mode, budget, and dates. Check amendments and individual award documents before drawing conclusions. If an old notice cannot be opened, use the bid ID or solicitation number to locate a copy. For archive-only awards, also record the archive record ID and any available local contract number.
+3. Open **Record review**, choose a status, and record the evidence checked or missing. **Reviewed** and **Follow up** require reviewer initials, a reason, and an HTTPS evidence link or an internal document reference. Drafts follow the case when you switch records in the open tab. Save the review before closing the tab.
+4. Use **Saved reviews** to reopen a case or export all recorded decisions to CSV. Download a JSON backup at the end of a session. Keep the matching dashboard HTML with it. Use **Import backup** on that dashboard to resume on another browser or device. Imports add missing reviews. If two versions of a case differ, open the conflict to compare the status, reviewer, evidence, and notes before choosing a version. Keep the source backup and download a copy of the current reviews before replacing any decision you need to retain.
+
+In **Tender review**, **Other notices with this solicitation** shows related scored notices, including those below the cutoff. Compare their titles, dates, budgets, and snapshot statuses. Open the original notices and check the agency records to establish whether they are reposts, revisions, or separate lots. Each bid keeps its own review. For newer postings and awards, use the [modernized PhilGEPS Bulletin Board](https://philgeps.gov.ph/Indexes/index).
 
 | Review status | Use |
 |---|---|
@@ -51,7 +53,15 @@ Use the commands above from the repository root. The field guide also works with
 
 Reviews stay in the browser profile and use the device clock. On a browser that blocks local file storage, the dashboard shows a session-only message and still supports export and restore. Keep backup files with the project, in the same access-controlled location as any internal notes. Open source links only when connected. A model flag is a lead for review. Formal findings require the underlying documents and the office's review process.
 
-During the pilot, review some cases below the cutoff alongside flagged cases. Track how many records had usable documents, time spent per case, and how many cases led to documented follow-up. These outcomes can help assess the screening workflow alongside existing manual practice.
+For an agency pilot, name a custodian for the working dashboard and backups. Save a dated copy of the reviewer's usual picks before opening the evidence. Run the screen alongside the existing review process, using that process for referrals and official case records. Review cases above and below the cutoff against the underlying documents. Record document availability, time per case, the planned next document check, and evidence-backed follow-up in both groups. Agree on what would justify continued use before reviewing the sample.
+
+## How XAI helps reviewers
+
+Explainable AI (XAI) connects a case’s score to a document check. TreeSHAP shows which inputs pushed the Isolation Forest score up or down. The dashboard shows the strongest push toward a higher score alongside the underlying value or peer comparison and a suggested source check. Budget differences point to the notice and amendments. Prior awards to the same vendor point to related award records or purchase orders.
+
+In Tagum bid **12883096**, the snapshot shows a **25-day bid window** and an **11-day median** among recent tenders in the same mode. The bid window made the largest contribution toward a higher score. A reviewer can start by confirming the published and closing dates and checking any deadline extensions. The peer median describes the model’s comparison group. [PhilGEPS notice 12883096](https://notices.philgeps.gov.ph/GEPSNONPILOT/Tender/PrintableBidNoticeAbstractUI.aspx?refid=12883096)
+
+During the pilot, save the blind review results before showing the explanations. Revisit selected cases and record the original document check, the explanation shown, any check it added or corrected, the document involved, and the extra minutes. Record whether an inspected document supported the change or the reviewer still needs it. This measures how often explanations change the review plan and how often staff can support those changes with evidence.
 
 ## What the counts mean
 
@@ -85,6 +95,8 @@ Both screens fit Isolation Forest and Extended Isolation Forest on their trainin
 ## Review and validation
 
 The award screen flagged **106 of 1,317** historical 2025 rows. Of those 106, 63 link to an official award and 43 link to a tender with source fields. The tender screen flagged **48 of 516** held-out tenders. Matching official evidence occurs independently of the historical model's scoring.
+
+The 516 evaluated tender notices include 40 solicitation numbers shared by multiple notices. Keeping only the latest prior notice for each known solicitation in each 365-day peer window changed one Isolation Forest flag. Both runs flagged 48 notices, with 47 in common. All 2,879 earlier tender rows lack solicitation numbers, so the training and calibration inputs stayed the same. The dashboard uses the published per-notice scores. Confirm reposts and separate lots in agency records before changing how notices count toward the peer comparison.
 
 TreeSHAP explains the standard forest's average isolation path length. Its negative contributions shorten the path. Local-DIFFI measures feature use on shorter paths. ExIFFI reports feature importance for the model with oblique splits. In the what-if panel, the amount or window changes within the observed training peer values and the remaining model inputs are held fixed. [TreeSHAP](https://shap.readthedocs.io/en/stable/generated/shap.TreeExplainer.html) · [Local-DIFFI](https://arxiv.org/abs/2007.11117) · [ExIFFI](https://arxiv.org/abs/2310.05468)
 
