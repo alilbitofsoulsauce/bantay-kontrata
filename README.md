@@ -6,24 +6,25 @@ This release supports a retrospective review pilot on a single workstation or br
 
 ## Open the project
 
+Clone the repository and open its project folder.
+
+    git clone https://github.com/alilbitofsoulsauce/bantay-kontrata.git
+    cd bantay-kontrata
+
 | Goal | Start here |
 |---|---|
-| Explore the results | Open **review/Bantay_Kontrata_Dashboard.html** in a browser from the repository or extracted release. The review queues, charts, and map work offline. Official notice and project links open the publishers' websites. |
-| Rerun in Google Colab | Open **Bantay_Kontrata_Tagum.ipynb**, select **Runtime → Run all**, and upload **Bantay_Kontrata_Tagum.zip** when prompted. Download the rebuilt files from the **tagum_review** folder. |
+| Explore the results | Open **review/Bantay_Kontrata_Dashboard.html** in a browser. The review queues, charts, and map work offline. Official notice and project links open the publishers' websites. |
+| Rerun in Google Colab | Open **Bantay_Kontrata_Tagum.ipynb** from this GitHub repository in Colab and select **Runtime → Run all**. The notebook fetches the repository in a fresh runtime. Download the rebuilt files from **tagum_review**. |
 | Rerun on a computer | Use Python 3.12 from the project root. See the commands below. |
 | Read the methodology | Open **docs/Bantay_Kontrata_Tagum_Guide.pdf**. |
 
     python -m pip install -r requirements.txt
-    python publish_dashboard.py
+    python publish_dashboard.py --output tagum_review
     python -m unittest discover -s tests -v
 
-## Repository handoff
+Open the rebuilt dashboard and tables from `tagum_review/`.
 
-The release archive has a top-level `Bantay_Kontrata_Tagum` folder. Use this folder as the project root after extraction. Keep the relative paths so the scripts and notebook can find the data and templates.
-
-To create the Colab archive from a committed checkout, run this from the repository root.
-
-    git -c core.autocrlf=false archive --format=zip --prefix=Bantay_Kontrata_Tagum/ --output=../Bantay_Kontrata_Tagum.zip HEAD
+## Repository layout
 
 | Path | Contents |
 |---|---|
@@ -33,7 +34,7 @@ To create the Colab archive from a committed checkout, run this from the reposit
 | `tests/` | Reconciliation, model, and refresh tests |
 | `docs/` | The field guide and the original research brief under `docs/reference/` |
 
-Use the commands above from the repository root. The field guide also works with this archive wherever it refers to the original project ZIP. The supplied Git ignore rules cover local environment files, generated working copies, and reviewer exports.
+Run the scripts from the repository root and keep the directory layout. Use the setup above when the field guide refers to the original distribution archive. Git ignores local environment files, generated working copies, and reviewer exports.
 
 ## Review a real case
 

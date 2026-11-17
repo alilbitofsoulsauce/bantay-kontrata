@@ -1,6 +1,6 @@
 # Additional datasets for Bantay-Kontrata Tagum
 
-The main addition is the official PS-PhilGEPS quarterly exports, filtered to the exact buyer **CITY OF TAGUM, DAVAO DEL NORTE**. The ZIP contains the locally relevant rows from eleven releases, from 2024 Q1 through 2026 Q3. The quarter in the filename describes the release, and the dates within a file can span more than that quarter. **provenance.json** lists the publisher, exact download pages, source file names, checksums, and extraction counts. [PS-PhilGEPS Open Data](https://philgeps.gov.ph/CmsHomePages/open-data)
+This directory contains official PS-PhilGEPS quarterly exports filtered to **CITY OF TAGUM, DAVAO DEL NORTE**. It includes rows from eleven releases spanning 2024 Q1 through 2026 Q3. The quarter in a filename identifies the release, and the records can span more than one quarter. **provenance.json** lists the publisher, download pages, source filenames, checksums, and extraction counts. [PS-PhilGEPS Open Data](https://philgeps.gov.ph/CmsHomePages/open-data)
 
 | Event year | Distinct bid references, by publication date | Distinct award references with a positive contract amount, by award date |
 |---|---:|---:|

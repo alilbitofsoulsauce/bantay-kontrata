@@ -15,6 +15,7 @@ __pycache__/
 /tagum_review/
 /staged-*/
 /review-*/
+/Bantay_Kontrata_Tagum*.zip
 
 # Reviewer exports and backups
 Tagum_reviews_*.csv
