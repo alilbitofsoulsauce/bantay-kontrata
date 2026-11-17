@@ -1,0 +1,407 @@
+{
+  "publisher": "Procurement Service \u2013 PhilGEPS",
+  "publisher_portal": "https://philgeps.gov.ph/CmsHomePages/open-data",
+  "buyer_filter": "CITY OF TAGUM, DAVAO DEL NORTE",
+  "files": [
+    {
+      "release": "2024Q1",
+      "filename": "2024_Jan-Mar.csv",
+      "download_page": "https://drive.google.com/file/d/12giiBfKdKXEJN5ADJqsTzujtJEX2tdop/view",
+      "source_sha256": "4e14881e3f41973ef17e6ec274a01fa37c9740d81aebdd0092ac05381d11cea4",
+      "source_bytes": 321179596,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 440342,
+        "tagum_line_item_rows": 525
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUMPAY ELEMENTARY SCHOOL - RODRIGUEZ (MONTALBAN) RIZAL",
+          119
+        ],
+        [
+          "TAGUM WATER DISTRICT",
+          90
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          32
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          27
+        ],
+        [
+          "BARANGAY VISAYAN VILLAGE, TAGUM CITY",
+          15
+        ]
+      ]
+    },
+    {
+      "release": "2024Q2",
+      "filename": "2024_Apr-Jun.csv",
+      "download_page": "https://drive.google.com/file/d/1fRDMW5myhn_1JHthpmeijsGzKqj7NGtL/view",
+      "source_sha256": "18dbea9974657c0e547cafb24c5b7b50dbc612facce1465e48f1065c95c076ab",
+      "source_bytes": 345354365,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 474381,
+        "tagum_line_item_rows": 820
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          136
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          59
+        ],
+        [
+          "TAGUMPAY ELEMENTARY SCHOOL - RODRIGUEZ (MONTALBAN) RIZAL",
+          33
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          31
+        ],
+        [
+          "DEPARTMENT OF TRADE AND INDUSTRY - TAGUM CITY",
+          20
+        ]
+      ]
+    },
+    {
+      "release": "2024Q3",
+      "filename": "2024_Jul-Sep.csv",
+      "download_page": "https://drive.google.com/file/d/13LI2GC9VWNXi1zow93xNYzekuU3FyLua/view",
+      "source_sha256": "20ecb0818896325e555435fd0e529cc27d9a0bc14d2711f90222b38745760584",
+      "source_bytes": 340492161,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 469108,
+        "tagum_line_item_rows": 567
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          113
+        ],
+        [
+          "TAGUMPAY ELEMENTARY SCHOOL - RODRIGUEZ (MONTALBAN) RIZAL",
+          56
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          31
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          29
+        ],
+        [
+          "TAGUMPAY NATIONAL HIGH SCHOOL - RODRIGUEZ (MONTALBAN) RIZAL",
+          19
+        ]
+      ]
+    },
+    {
+      "release": "2024Q4",
+      "filename": "2024_Oct-Dec.csv",
+      "download_page": "https://drive.google.com/file/d/1y4-jcz_SmUiNd_oqyjtK9yWu1W1QCvHt/view",
+      "source_sha256": "2266e5f97fafc121828197ac5297d48f21053c219c7f42ea307e22f982007ce9",
+      "source_bytes": 373084933,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 512719,
+        "tagum_line_item_rows": 691
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUMPAY ELEMENTARY SCHOOL - RODRIGUEZ (MONTALBAN) RIZAL",
+          219
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          53
+        ],
+        [
+          "TAGUM WATER DISTRICT",
+          41
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          33
+        ],
+        [
+          "DEPARTMENT OF TRADE AND INDUSTRY - TAGUM CITY",
+          31
+        ]
+      ]
+    },
+    {
+      "release": "2025Q1",
+      "filename": "2025_(JAN-MAR).csv",
+      "download_page": "https://drive.google.com/file/d/1bmgOnlLeP0MO3IHzXSTmu9NSM7cAQL8x/view",
+      "source_sha256": "c9ef533d330d509de0fef405848c23c087de03affd357797279a5a5601cb5ec7",
+      "source_bytes": 337089273,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 469569,
+        "tagum_line_item_rows": 736
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          177
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          29
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          17
+        ],
+        [
+          "BARANGAY MAGUGPO WEST, TAGUM CITY, DAVAO DEL NORTE",
+          17
+        ],
+        [
+          "TAGUM CITY NATIONAL HIGH SCHOOL",
+          13
+        ]
+      ]
+    },
+    {
+      "release": "2025Q2",
+      "filename": "2025_(APR-JUN).csv",
+      "download_page": "https://drive.google.com/file/d/1CCL2BhNg88rqHZmYvaFLuHBHF-GML6lX/view",
+      "source_sha256": "9108892e7d23b948992bfe1976654f679930bd99f101ca4ebe0d1ae8355fecbf",
+      "source_bytes": 263928282,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 372122,
+        "tagum_line_item_rows": 859
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          168
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          53
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          27
+        ],
+        [
+          "TAGUMPAY NATIONAL HIGH SCHOOL - RODRIGUEZ (MONTALBAN) RIZAL",
+          18
+        ],
+        [
+          "BARANGAY TAGUMPAY - QUEZON CITY",
+          18
+        ]
+      ]
+    },
+    {
+      "release": "2025Q3",
+      "filename": "2025_(JUL-SEPT).csv",
+      "download_page": "https://drive.google.com/file/d/1WEgvYwaVEZei1Mf0s9BdQk3G1OtTVYvg/view",
+      "source_sha256": "f195e9153cd82a326aac3008f9993b1efbe6a737a4d744f652440fcbcc0a4ec9",
+      "source_bytes": 240116147,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 361502,
+        "tagum_line_item_rows": 420
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          53
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          41
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          19
+        ],
+        [
+          "TAGUMPAY NATIONAL HIGH SCHOOL - RODRIGUEZ (MONTALBAN) RIZAL",
+          19
+        ],
+        [
+          "BARANGAY MAGUGPO WEST, TAGUM CITY, DAVAO DEL NORTE",
+          12
+        ]
+      ]
+    },
+    {
+      "release": "2025Q4",
+      "filename": "2025_Oct-Dec.csv",
+      "download_page": "https://drive.google.com/file/d/1UGxG0X6CB2Z7Zi3r5zJOwwpRq2CTQx0o/view",
+      "source_sha256": "abffbf5eccdb2ad9ffdd79ec6f63681bccc1a3bba87b82a0779b9ce30eeb5b67",
+      "source_bytes": 220548076,
+      "raw_field_count": 46,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "tab",
+      "count": {
+        "national_records": 352091,
+        "tagum_line_item_rows": 399,
+        "tagum_cells_with_windows_encoding_fallback": 4
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          110
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          38
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          20
+        ],
+        [
+          "TAGUM CITY NATIONAL HIGH SCHOOL",
+          9
+        ],
+        [
+          "BARANGAY VISAYAN VILLAGE, TAGUM CITY",
+          9
+        ]
+      ]
+    },
+    {
+      "release": "2026Q1",
+      "filename": "DATASETS_PHILGEPS_2026_JAN-MARCH.csv",
+      "download_page": "https://drive.google.com/file/d/1Rk-4nFLpfioQKAS0gBXXY9MwdS-1P9yE/view",
+      "source_sha256": "9f4bc8b945396745f0fb8cb0ff376c2d86ebb3d52cf0d9661f3fe755402b2cef",
+      "source_bytes": 159729871,
+      "raw_field_count": 47,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 246698,
+        "tagum_line_item_rows": 228,
+        "tagum_cells_with_windows_encoding_fallback": 1
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          277
+        ],
+        [
+          "VISAYAN VILLAGE CENTRAL ELEMENTARY SCHOOL - TAGUM CITY DAVAO",
+          23
+        ],
+        [
+          "DEPARTMENT OF EDUCATION - DIVISION OF TAGUM CITY",
+          13
+        ],
+        [
+          "TAGUM CITY NATIONAL HIGH SCHOOL",
+          11
+        ],
+        [
+          "BARANGAY VISAYAN VILLAGE, TAGUM CITY",
+          9
+        ]
+      ]
+    },
+    {
+      "release": "2026Q2",
+      "filename": "DATASETS_PHILGEPS_2026_APRIL-JUNE.csv",
+      "download_page": "https://drive.google.com/file/d/1uh4sS9PH76A583ZHwT5SrEC6XpIf4QPm/view",
+      "source_sha256": "1a97caeef98b2bb0ea6a3e10defc2ee46521b5bdf0562064894cc701f8001c94",
+      "source_bytes": 176136888,
+      "raw_field_count": 47,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 272856,
+        "tagum_line_item_rows": 289,
+        "tagum_cells_with_windows_encoding_fallback": 2
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          292
+        ],
+        [
+          "VISAYAN VILLAGE CENTRAL ELEMENTARY SCHOOL - TAGUM CITY DAVAO",
+          18
+        ],
+        [
+          "BARANGAY VISAYAN VILLAGE, TAGUM CITY",
+          14
+        ],
+        [
+          "TAGUM CITY NATIONAL HIGH SCHOOL",
+          12
+        ],
+        [
+          "BARANGAY TAGUMPAY - QUEZON CITY",
+          10
+        ]
+      ]
+    },
+    {
+      "release": "2026Q3",
+      "filename": "DATASETS_PHILGEPS_2026_JULY-SEPTEMBER.csv",
+      "download_page": "https://drive.google.com/file/d/1enMAqo1VWFwnf01iHPPw9sjNnwjlTWbt/view",
+      "source_sha256": "12b6a9d1da51720e950f734a1aed2f14644b3aae022e4cf04c1f4ccb0c1bcd1d",
+      "source_bytes": 124793223,
+      "raw_field_count": 47,
+      "character_encoding": "UTF-8 with Windows-1252 fallback for invalid UTF-8 bytes in selected cells",
+      "column_separator": "comma",
+      "count": {
+        "national_records": 196202,
+        "tagum_line_item_rows": 308,
+        "tagum_cells_with_windows_encoding_fallback": 3
+      },
+      "other_tagum_buyers_example": [
+        [
+          "TAGUM WATER DISTRICT",
+          172
+        ],
+        [
+          "UNIVERSITY OF SOUTHEASTERN PHIL.  - TAGUM MABINI CAMPUS",
+          18
+        ],
+        [
+          "BARANGAY SAN MIGUEL, TAGUM CITY, DAVAO DEL NORTE",
+          11
+        ],
+        [
+          "BARANGAY TAGUMPAY, GABALDON,NUEVA ECIJA",
+          9
+        ],
+        [
+          "BARANGAY MAGUGPO WEST, TAGUM CITY, DAVAO DEL NORTE",
+          8
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,328 @@
+{
+  "coverage": {
+    "archive_awards": 11305,
+    "official_awards": 3193,
+    "official_tenders": 3395,
+    "linked_awards": 2198,
+    "award_register_rows": 12300,
+    "unresolved_pairs": 1765,
+    "unresolved_register_rows": 326,
+    "official_awards_with_tender": 2531,
+    "latest_official_award_date": "2025-09-29",
+    "latest_tender_publication_date": "2026-09-26",
+    "flood_links": 10,
+    "annual": [
+      {
+        "year": "2017",
+        "archive_awards": 603,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 603,
+        "official_tenders": 0
+      },
+      {
+        "year": "2018",
+        "archive_awards": 1048,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 1048,
+        "official_tenders": 0
+      },
+      {
+        "year": "2019",
+        "archive_awards": 1378,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 1378,
+        "official_tenders": 0
+      },
+      {
+        "year": "2020",
+        "archive_awards": 1024,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 1024,
+        "official_tenders": 0
+      },
+      {
+        "year": "2021",
+        "archive_awards": 1443,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 1443,
+        "official_tenders": 0
+      },
+      {
+        "year": "2022",
+        "archive_awards": 1513,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 1513,
+        "official_tenders": 0
+      },
+      {
+        "year": "2023",
+        "archive_awards": 1401,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 1401,
+        "official_tenders": 0
+      },
+      {
+        "year": "2024",
+        "archive_awards": 1578,
+        "official_awards": 1871,
+        "matches": 1395,
+        "award_register_rows": 2054,
+        "official_tenders": 1403
+      },
+      {
+        "year": "2025",
+        "archive_awards": 1317,
+        "official_awards": 1322,
+        "matches": 803,
+        "award_register_rows": 1836,
+        "official_tenders": 1476
+      },
+      {
+        "year": "2026",
+        "archive_awards": 0,
+        "official_awards": 0,
+        "matches": 0,
+        "award_register_rows": 0,
+        "official_tenders": 516
+      }
+    ],
+    "evaluation_awards_with_official_id": 803,
+    "evaluation_awards_with_official_tender": 689,
+    "award_flags_with_official_id": 63,
+    "award_flags_with_official_tender": 43
+  },
+  "award": {
+    "stress_trials_per_scenario": 8,
+    "scenarios": [
+      {
+        "scenario": "Amount ×0.25",
+        "method": "Isolation Forest",
+        "eligible_awards": 1317,
+        "substitutions_per_trial": 66,
+        "ap": 0.07269152574315069,
+        "recall": 0.10795454545454546,
+        "paired_win": 0.7064393939393939
+      },
+      {
+        "scenario": "Amount ×0.25",
+        "method": "Extended Isolation Forest",
+        "eligible_awards": 1317,
+        "substitutions_per_trial": 66,
+        "ap": 0.07201016692566592,
+        "recall": 0.05681818181818182,
+        "paired_win": 0.6685606060606061
+      },
+      {
+        "scenario": "Amount ×0.25",
+        "method": "Amount-only baseline",
+        "eligible_awards": 1317,
+        "substitutions_per_trial": 66,
+        "ap": 0.09918047407364985,
+        "recall": 0.11174242424242424,
+        "paired_win": 0.6666666666666666
+      },
+      {
+        "scenario": "Amount ×4",
+        "method": "Isolation Forest",
+        "eligible_awards": 1317,
+        "substitutions_per_trial": 66,
+        "ap": 0.0778800119065326,
+        "recall": 0.13825757575757575,
+        "paired_win": 0.7992424242424242
+      },
+      {
+        "scenario": "Amount ×4",
+        "method": "Extended Isolation Forest",
+        "eligible_awards": 1317,
+        "substitutions_per_trial": 66,
+        "ap": 0.08318818377924353,
+        "recall": 0.07575757575757576,
+        "paired_win": 0.821969696969697
+      },
+      {
+        "scenario": "Amount ×4",
+        "method": "Amount-only baseline",
+        "eligible_awards": 1317,
+        "substitutions_per_trial": 66,
+        "ap": 0.13153668732343948,
+        "recall": 0.18181818181818182,
+        "paired_win": 0.8210227272727273
+      },
+      {
+        "scenario": "Vendor burst",
+        "method": "Isolation Forest",
+        "eligible_awards": 504,
+        "substitutions_per_trial": 25,
+        "ap": 0.2677108021672688,
+        "recall": 0.755,
+        "paired_win": 1.0
+      },
+      {
+        "scenario": "Vendor burst",
+        "method": "Extended Isolation Forest",
+        "eligible_awards": 504,
+        "substitutions_per_trial": 25,
+        "ap": 0.2830937539744056,
+        "recall": 0.72,
+        "paired_win": 1.0
+      },
+      {
+        "scenario": "Vendor burst",
+        "method": "Amount-only baseline",
+        "eligible_awards": 504,
+        "substitutions_per_trial": 25,
+        "ap": 0.059513245980032756,
+        "recall": 0.08499999999999999,
+        "paired_win": 0.5
+      }
+    ],
+    "faithfulness": {
+      "TreeSHAP": {
+        "mean_top_drop": 0.0849350779960433,
+        "mean_other_drop": 0.007783283994050906,
+        "top_drop_positive": 1.0
+      },
+      "Local-DIFFI": {
+        "mean_top_drop": 0.0818252232967069,
+        "mean_other_drop": 0.008560747668885009,
+        "top_drop_positive": 0.9528301886792453
+      }
+    },
+    "stability": {
+      "refits": 8,
+      "tree_shap_top_feature_agreement": 0.9764150943396227,
+      "local_diffi_top_feature_agreement": 0.7818396226415094,
+      "score_rank_spearman": 0.984758056952921
+    },
+    "amount_scenarios": {
+      "review_rows": 106,
+      "eligible": 106,
+      "flipped": 40
+    },
+    "maximum_shap_error": 4.440892098500626e-14,
+    "n_flags": 106,
+    "n_extended_flags": 70,
+    "n_both": 63
+  },
+  "tender": {
+    "stress_trials_per_scenario": 8,
+    "scenarios": [
+      {
+        "scenario": "Budget ×4",
+        "method": "Isolation Forest",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.09651196164195316,
+        "recall": 0.08653846153846154,
+        "paired_win": 0.9158653846153846
+      },
+      {
+        "scenario": "Budget ×4",
+        "method": "Extended Isolation Forest",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.10250743003804597,
+        "recall": 0.08653846153846154,
+        "paired_win": 0.8677884615384616
+      },
+      {
+        "scenario": "Budget ×4",
+        "method": "Budget-only baseline",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.2063289515165356,
+        "recall": 0.5336538461538461,
+        "paired_win": 0.9134615384615385
+      },
+      {
+        "scenario": "Bid window halved",
+        "method": "Isolation Forest",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.10587525643074273,
+        "recall": 0.05288461538461539,
+        "paired_win": 0.8557692307692307
+      },
+      {
+        "scenario": "Bid window halved",
+        "method": "Extended Isolation Forest",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.13866483721894096,
+        "recall": 0.08653846153846154,
+        "paired_win": 0.8557692307692307
+      },
+      {
+        "scenario": "Bid window halved",
+        "method": "Budget-only baseline",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.05766730809967396,
+        "recall": 0.12980769230769232,
+        "paired_win": 0.5
+      },
+      {
+        "scenario": "Budget ×4 and window halved",
+        "method": "Isolation Forest",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.1505343970605549,
+        "recall": 0.14423076923076925,
+        "paired_win": 0.8942307692307693
+      },
+      {
+        "scenario": "Budget ×4 and window halved",
+        "method": "Extended Isolation Forest",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.1933861877286216,
+        "recall": 0.1875,
+        "paired_win": 0.951923076923077
+      },
+      {
+        "scenario": "Budget ×4 and window halved",
+        "method": "Budget-only baseline",
+        "eligible_awards": 516,
+        "substitutions_per_trial": 26,
+        "ap": 0.20426903342158031,
+        "recall": 0.5240384615384616,
+        "paired_win": 0.9086538461538461
+      }
+    ],
+    "faithfulness": {
+      "TreeSHAP": {
+        "mean_top_drop": 0.12340325431903354,
+        "mean_other_drop": 0.017282536192344548,
+        "top_drop_positive": 1.0
+      },
+      "Local-DIFFI": {
+        "mean_top_drop": 0.11913173561076207,
+        "mean_other_drop": 0.018350415869412415,
+        "top_drop_positive": 1.0
+      }
+    },
+    "stability": {
+      "refits": 8,
+      "tree_shap_top_feature_agreement": 0.9817708333333334,
+      "local_diffi_top_feature_agreement": 0.8411458333333334,
+      "score_rank_spearman": 0.9759233455930774
+    },
+    "maximum_shap_error": 3.907985046680551e-14,
+    "n_flags": 48,
+    "n_extended_flags": 48,
+    "n_both": 45,
+    "window_scenarios": {
+      "review_rows": 48,
+      "eligible": 47,
+      "flipped": 6
+    }
+  },
+  "snapshot_id": "f93b4199734833f6f7374557c27ee0f3adadd5bcdd9440a3811cc557d7aa9344"
+}

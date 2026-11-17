@@ -1,0 +1,951 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bantay-Kontrata Tagum</title>
+<style>
+:root{--ink:#182638;--muted:#536477;--line:#d9e4ed;--paper:#f3f7fa;--blue:#101f35;--teal:#136d64;--mint:#dff4ed;--amber:#945514;--soft-amber:#fff2d8;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font:15px/1.53 Inter,"Segoe UI",sans-serif}
+a{color:#0c655b;text-underline-offset:3px}
+button,select,input,textarea{font:inherit}
+button:not(:disabled),select{cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible,a:focus-visible,canvas:focus-visible{outline:3px solid #2c9b8b;outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{width:min(1320px,calc(100% - 56px));margin-inline:auto}
+header{background:var(--blue);color:var(--white)}
+.mast{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 0;border-bottom:1px solid #ffffff24}
+.brand{display:flex;align-items:center;gap:11px;font-size:.95rem;font-weight:700}
+.brand-mark{width:15px;height:15px;border:3px solid #76d5be;border-radius:4px;transform:rotate(-10deg)}
+.source-year{color:#b9c8d5;font-size:.82rem;text-align:right}
+.hero{padding:31px 0 33px;display:flex;justify-content:space-between;align-items:end;gap:24px}
+h1,h2,h3,p{margin:0}
+h1{font-size:clamp(2rem,5vw,3.35rem);line-height:1.04;letter-spacing:-.055em}
+.hero p{color:#c9d7e3;margin-top:12px;max-width:680px}
+.hero-side{font-size:.85rem;color:#c9d7e3}
+nav{background:var(--white);border-bottom:1px solid var(--line)}
+.nav-items{display:flex;align-items:center;gap:24px}
+.tab{border:0;border-bottom:3px solid transparent;background:transparent;padding:13px 2px 11px;font-weight:650;color:var(--muted);white-space:nowrap}
+.tab[aria-selected="true"]{border-color:var(--teal);color:var(--teal)}
+main{padding:24px 0 38px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:14px}
+.metric,.card{background:var(--white);border:1px solid var(--line);border-radius:13px}
+.metric{padding:15px 18px}
+.metric strong{display:block;font-size:1.8rem;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:4px}
+.metric span,.small{font-size:.86rem;color:var(--muted)}
+.card{padding:18px 20px;min-width:0}
+.card + .card{margin-top:15px}
+h2{font-size:1.22rem;line-height:1.25;letter-spacing:-.018em}
+h3{font-size:1.01rem;line-height:1.25}
+.sub{font-size:.87rem;color:var(--muted);margin-top:5px}
+.review-layout{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(345px,1fr);gap:15px;margin-top:15px;align-items:start}
+.review-layout .card{margin:0}
+.timeline{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:7px;margin-top:12px}
+.month{appearance:none;background:transparent;border:0;padding:2px;min-width:0;color:var(--muted);font-size:.72rem;text-align:center}
+.month[aria-pressed="true"]{background:#e8f4f2;color:var(--teal);border-radius:5px;font-weight:750}
+.track{height:53px;display:flex;justify-content:center;align-items:end;margin:1px 0 3px;border-bottom:1px solid var(--line)}
+.month-bar{width:70%;max-width:40px;min-height:1px;background:#cde6e7;position:relative;border-radius:4px 4px 0 0}
+.month-bar i{background:var(--teal);position:absolute;bottom:0;left:0;right:0;border-radius:2px 2px 0 0}
+.controls{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0 10px;align-items:end}
+.controls label,.slider-label{font-size:.8rem;color:var(--muted);font-weight:650;display:block}
+.controls input:not([type="checkbox"]),.controls select{display:block;margin-top:3px;border:1px solid #c2d3df;background:#fff;border-radius:7px;padding:7px;color:var(--ink);max-width:100%}
+.controls input:not([type="checkbox"]){width:100%}
+.search{flex:1 1 170px;min-width:130px}
+.controls select{max-width:210px}
+.check{display:flex!important;align-items:center;gap:4px;padding-bottom:8px}
+input[type="checkbox"],input[type="range"]{accent-color:var(--teal)}
+.data-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.83rem}
+th,td{padding:9px 7px;text-align:left;vertical-align:top;border-bottom:1px solid #e7edf3}
+th{color:var(--muted);font-size:.73rem;letter-spacing:.005em;background:#f4f8fb}
+td.num,th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.active td{background:#eff9f6}
+.case-button{border:0;background:transparent;text-align:left;padding:0;color:#165f58;font-weight:700;line-height:1.3;display:block;max-width:100%}
+.case-button:hover,.case-button:focus-visible{text-decoration:underline}
+.case-sub{font-size:.75rem;color:var(--muted);display:block;margin-top:3px}
+.snapshot{margin-bottom:15px;padding:9px 13px;border:1px solid var(--line);border-radius:8px;background:var(--white);font-size:.81rem;color:var(--muted)}
+.review-entry{margin:13px 0;padding:9px 12px;background:#f0f7f5;border:1px solid #c9e1da;border-radius:8px}
+.review-entry summary{cursor:pointer;color:#165f58;font-size:.88rem;font-weight:700}
+.review-entry form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.review-entry label{display:block;color:var(--muted);font-size:.8rem;font-weight:650;min-width:0}
+.review-entry input,.review-entry select,.review-entry textarea{display:block;width:100%;padding:6px 8px;margin-top:3px;border:1px solid #bdcfdb;border-radius:6px;background:#fff;color:var(--ink)}
+.review-entry textarea{resize:vertical}
+.review-entry .full{grid-column:1/-1}
+.review-entry .actions,.review-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start}
+.review-entry .actions{margin-top:0}
+.review-tools{align-items:center;margin:13px 0 10px}
+.review-entry .primary{background:var(--teal);color:white;border-color:var(--teal);font-weight:650}
+.saved-label{color:#165f58;font-weight:700}
+.review-feedback{line-height:1.4;min-height:1.35em}
+.saved-notice{margin:7px 0}
+.saved-table th:first-child{min-width:180px}
+.pill{display:inline-block;font-size:.72rem;font-weight:750;border-radius:999px;padding:2px 7px;line-height:1.4;white-space:nowrap}
+.pill.amber{color:#764105;background:var(--soft-amber)}
+.pill.teal{color:#145b52;background:var(--mint)}
+.pill.neutral{color:#455972;background:#eaf0f7}
+.actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:13px}
+.pager{display:flex;gap:5px}
+.minor,.methods button{background:#fff;border:1px solid #cbd8e2;color:var(--ink);border-radius:7px;padding:5px 9px;font-size:.83rem}
+.minor:disabled{color:#748396;cursor:default;background:#f2f6fa}
+.case-title{margin:8px 0;font-size:1.09rem;overflow-wrap:anywhere}
+.case-vendor{margin-bottom:10px}
+.case-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;padding:11px 0;margin:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.case-facts dt{color:var(--muted);font-size:.76rem}
+.case-facts dd{margin:2px 0 0;font-size:.88rem;font-weight:650;overflow-wrap:anywhere}
+.case-facts .wide{grid-column:1/-1}
+.inspector-divider{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+.methods{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 11px}
+.methods button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.chart{display:grid;gap:6px;margin-top:12px}
+.bar-row{display:grid;grid-template-columns:minmax(115px,1.15fr) minmax(80px,.85fr) 67px;gap:8px;align-items:center;font-size:.78rem;line-height:1.25}
+.bar-label span{display:block;color:var(--muted);font-size:.72rem;margin-top:3px}
+.bar-track{position:relative;height:14px;background:#edf3f6;border-radius:3px}
+.bar-track.diverging::before{content:"";position:absolute;left:50%;height:100%;width:1px;background:#7a8c9f;z-index:1}
+.bar{height:100%;position:absolute;border-radius:3px;background:#1c8274}
+.bar.short{background:#b96324}
+.bar-number{font-variant-numeric:tabular-nums;text-align:right}
+.case-note{padding:10px 12px;border-radius:8px;background:#f2f7fb;color:var(--muted);font-size:.83rem;margin-top:11px}
+.scenario-readout{font-size:.88rem;line-height:1.5;margin-top:6px}
+.scenario-slider{width:100%;margin-top:8px}
+.source-card{background:#f3f8fb;padding:12px 14px;border-radius:9px;margin-top:12px}
+.source-card .case-facts{border-bottom:0}
+.source-card a{display:inline-block;margin-top:6px;font-size:.83rem}
+.source-card .small{margin-top:6px}
+.source-methods{margin:14px 0 13px}
+.linked-label{color:var(--teal);font-weight:700}
+.map-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,1fr);gap:15px;margin-top:15px;align-items:start}
+.map-layout .card{margin:0}
+#map{width:100%;height:379px;margin-top:10px;display:block;border-radius:8px;background:#edf6f8;cursor:crosshair}
+.map-detail{min-height:52px;margin-top:8px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:5px}
+.legend i{width:9px;height:9px;border-radius:2px;background:#cde6e7;display:inline-block;margin-right:4px}
+.legend i.green{background:#16756a}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.results-grid .card{margin:0}
+.results-grid .wide{grid-column:1/-1}
+.source-links{margin:15px 0 0;padding:0;list-style:none;display:flex;gap:8px 18px;flex-wrap:wrap;font-size:.83rem}
+footer{border-top:1px solid var(--line);background:#fff;padding:14px 0 17px}
+.note{padding:8px 0;font-size:.84rem;color:var(--muted)}
+@media(max-width:1060px){.wrap{width:calc(100% - 36px)}.review-layout{grid-template-columns:minmax(0,1.1fr) minmax(330px,1fr)}.card{padding:15px}}
+@media(max-width:840px){.review-layout,.map-layout{grid-template-columns:1fr}.hero-side{display:none}.results-grid{grid-template-columns:1fr}.source-year{font-size:.75rem}}
+@media(max-width:500px){.wrap{width:calc(100% - 24px)}.metrics{gap:6px}.metric{padding:11px 9px}.metric strong{font-size:1.3rem}.metric span{font-size:.72rem;line-height:1.2;display:block}.nav-items{gap:10px;overflow-x:auto}.tab{font-size:.81rem}.timeline{gap:2px}.month{font-size:.62rem}.brand{font-size:.87rem}.hide-small{display:none}.bar-row{grid-template-columns:minmax(102px,1fr) minmax(65px,.8fr) 58px;gap:5px}.controls select{max-width:170px}#map{height:326px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap mast">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span>Bantay-Kontrata Tagum</div>
+    <div class="source-year">City of Tagum, Davao del Norte</div>
+  </div>
+  <div class="wrap hero">
+    <div><h1>Procurement review</h1><p>Inspect 2025 awards, screen published tenders, and verify DPWH project records.</p></div>
+    <div class="hero-side">PhilGEPS and DPWH records</div>
+  </div>
+</header>
+<nav aria-label="Dashboard sections">
+  <div class="wrap nav-items" role="tablist" aria-label="Dashboard sections">
+    <button class="tab" role="tab" id="awards-tab" aria-controls="awards" aria-selected="true" data-section="awards">Award review</button>
+    <button class="tab" role="tab" id="tenders-tab" aria-controls="tenders" aria-selected="false" tabindex="-1" data-section="tenders">Tender review</button>
+    <button class="tab" role="tab" id="saved-tab" aria-controls="saved" aria-selected="false" tabindex="-1" data-section="saved">Saved reviews</button>
+    <button class="tab" role="tab" id="infrastructure-tab" aria-controls="infrastructure" aria-selected="false" tabindex="-1" data-section="infrastructure">Infrastructure</button>
+    <button class="tab" role="tab" id="validation-tab" aria-controls="validation" aria-selected="false" tabindex="-1" data-section="validation">Validation</button>
+  </div>
+</nav>
+<main class="wrap">
+<p class="snapshot" id="snapshotBanner"></p>
+<section id="awards" role="tabpanel" aria-labelledby="awards-tab">
+  <div class="metrics">
+    <div class="metric"><span>2025 awards scored</span><strong id="awardCount"></strong></div>
+    <div class="metric"><span>Above review cutoff</span><strong id="flagCount"></strong></div>
+    <div class="metric"><span>Review rows with a linked tender</span><strong id="linkedFlagCount"></strong></div>
+  </div>
+  <div class="card">
+    <h2>Awards by month</h2>
+    <div class="legend small"><span><i></i>Scored awards</span><span><i class="green"></i>Above cutoff</span><span>Select a month to filter the queue.</span></div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+  <div class="review-layout">
+    <section class="card">
+      <h2>Review queue</h2>
+      <p class="sub">Open a row to check published evidence and record your review. Higher scores prioritize unusual records.</p>
+      <div class="controls">
+        <label class="search">Find an award<input id="awardSearch" type="search" placeholder="Title, vendor or ID"></label>
+        <label>Category<select id="awardCategory"><option value="">All categories</option></select></label>
+        <label class="check"><input type="checkbox" id="flagsOnly" checked>Above cutoff</label>
+        <label class="check"><input type="checkbox" id="awardLinked">Linked tender</label>
+      </div>
+      <div class="data-scroll">
+        <table aria-label="Ranked awards">
+          <thead><tr><th scope="col" class="num">Rank</th><th scope="col">Award and vendor</th><th scope="col" class="num hide-small">Amount</th><th scope="col" class="num">Score</th></tr></thead>
+          <tbody id="awardTable"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <div class="small" id="awardRange" aria-live="polite"></div>
+        <div class="pager"><button class="minor" id="awardPrev">Previous</button><button class="minor" id="awardNext">Next</button></div>
+      </div>
+    </section>
+    <section class="card" id="inspector" aria-label="Selected award explanation"></section>
+  </div>
+</section>
+<section id="tenders" role="tabpanel" aria-labelledby="tenders-tab" hidden>
+  <div class="metrics">
+    <div class="metric"><span>Tenders scored since 2026</span><strong id="tenderCount"></strong></div>
+    <div class="metric"><span>Above review cutoff</span><strong id="tenderFlagCount"></strong></div>
+    <div class="metric"><span>Tenders in the source extract</span><strong id="allTenderCount"></strong></div>
+  </div>
+  <div class="review-layout">
+    <section class="card">
+      <h2>Tender review queue</h2>
+      <p class="sub">The screen uses the approved budget, bid window, procurement mode, classification and publication timing.</p>
+      <div class="controls">
+        <label class="search">Find a tender<input id="tenderSearch" type="search" placeholder="Title, bid ID or solicitation"></label>
+        <label>Procurement mode<select id="tenderMode"><option value="">All modes</option></select></label>
+        <label class="check"><input type="checkbox" id="tenderFlagsOnly" checked>Above cutoff</label>
+      </div>
+      <div class="data-scroll">
+        <table aria-label="Ranked tenders">
+          <thead><tr><th scope="col" class="num">Rank</th><th scope="col">Tender and date</th><th scope="col" class="num hide-small">Bid window</th><th scope="col" class="num">Score</th></tr></thead>
+          <tbody id="tenderTable"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <div class="small" id="tenderRange" aria-live="polite"></div>
+        <div class="pager"><button class="minor" id="tenderPrev">Previous</button><button class="minor" id="tenderNext">Next</button></div>
+      </div>
+    </section>
+    <section class="card" id="tenderInspector" aria-label="Selected tender explanation"></section>
+  </div>
+</section>
+<section id="saved" role="tabpanel" aria-labelledby="saved-tab" hidden>
+  <section class="card">
+    <h2>Saved reviews</h2>
+    <p class="sub" id="reviewStorage"></p>
+    <div class="review-tools">
+      <button class="minor" type="button" id="reviewCsv">Export CSV</button>
+      <button class="minor" type="button" id="reviewBackup">Download backup</button>
+      <button class="minor" type="button" id="reviewRestore">Import backup</button>
+      <input hidden id="reviewFile" type="file" accept=".json,application/json" aria-label="Choose a review backup">
+    </div>
+    <p class="small review-feedback" id="reviewFeedback" role="status"></p>
+    <div class="controls">
+      <label>Review status<select id="savedStatus"><option value="">All statuses</option></select></label>
+    </div>
+    <p class="small saved-notice" id="savedCount"></p>
+    <div class="data-scroll">
+      <table class="saved-table" aria-label="Saved reviews">
+        <thead><tr><th scope="col">Record</th><th scope="col">Review status</th><th scope="col">Reviewer</th><th scope="col">Updated (PHT)</th></tr></thead>
+        <tbody id="savedCases"></tbody>
+      </table>
+    </div>
+  </section>
+</section>
+<section id="infrastructure" role="tabpanel" aria-labelledby="infrastructure-tab" hidden>
+  <div class="metrics">
+    <div class="metric"><span>DPWH records in view</span><strong id="dpwhTotal"></strong></div>
+    <div class="metric"><span>Mapped project records</span><strong id="dpwhMapped"></strong></div>
+    <div class="metric"><span>Completed with valid dates</span><strong id="dpwhDates"></strong></div>
+  </div>
+  <div class="map-layout">
+    <section class="card">
+      <h2>DPWH projects by barangay</h2>
+      <p class="sub">Points use published coordinates. Select a point or use the barangay filter.</p>
+      <canvas id="map" tabindex="0" role="img" aria-label="Map of Tagum barangays and DPWH projects. The adjacent filters and project list provide an alternative to the map."></canvas>
+      <div id="mapDetail" class="map-detail small" aria-live="polite"></div>
+    </section>
+    <section class="card">
+      <h2>Project records</h2>
+      <p class="sub">Schedule variance is actual minus target completion. A positive value means the reported date came later.</p>
+      <div class="controls">
+        <label class="search">Find a project<input id="dpwhSearch" type="search" placeholder="Contract ID or project title"></label>
+        <label>Barangay<select id="dpwhBarangay"><option value="">All barangays</option><option value="unmapped">Unmapped records</option></select></label>
+        <label>Order<select id="dpwhSort"><option value="recent">Latest infrastructure year</option><option value="variance">Largest schedule variance</option></select></label>
+        <label class="check"><input type="checkbox" id="dpwhFlood">Flood-map link</label>
+      </div>
+      <div class="data-scroll">
+        <table aria-label="DPWH projects">
+          <thead><tr><th scope="col">Project</th><th scope="col" class="num">Variance</th><th scope="col" class="num hide-small">Cost / ABC</th></tr></thead>
+          <tbody id="dpwhTable"></tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <div class="small" id="dpwhRange" aria-live="polite"></div>
+        <div class="pager"><button class="minor" id="dpwhPrev">Previous</button><button class="minor" id="dpwhNext">Next</button></div>
+      </div>
+    </section>
+  </div>
+</section>
+<section id="validation" role="tabpanel" aria-labelledby="validation-tab" hidden>
+  <section class="card">
+    <h2>Source coverage</h2>
+    <p class="sub" id="coverageNote"></p>
+    <div id="coverageTable" class="data-scroll"></div>
+  </section>
+  <div class="methods source-methods" aria-label="Model validation">
+    <button id="awardValidation" aria-pressed="true">Award model</button>
+    <button id="tenderValidation" aria-pressed="false">Tender model</button>
+  </div>
+  <div class="results-grid">
+    <section class="card">
+      <h2>Data and cutoff</h2>
+      <p class="sub" id="splitNote"></p>
+      <div id="splitTable" class="data-scroll"></div>
+    </section>
+    <section class="card">
+      <h2>Explanation checks</h2>
+      <div id="explanationMetrics"></div>
+    </section>
+    <section class="card wide">
+      <h2>Simulated stress tests</h2>
+      <p class="sub" id="stressNote"></p>
+      <div id="stressTable" class="data-scroll"></div>
+    </section>
+    <section class="card wide">
+      <h2>Source records</h2>
+      <p class="sub" id="sourceDateNote"></p>
+      <p class="note">Bidder counts require a source that explicitly reports bids received. Verify review rows against the corresponding procurement documents.</p>
+      <ul class="source-links">
+        <li><a href="https://huggingface.co/datasets/bettergovph/philgeps-data" target="_blank" rel="noopener">BetterGov / PhilGEPS data</a></li>
+        <li><a href="https://philgeps.gov.ph/CmsHomePages/open-data" target="_blank" rel="noopener">Official PhilGEPS releases</a></li>
+        <li><a href="https://lovethephilippines.com/data" target="_blank" rel="noopener">DPWH data mirror</a></li>
+        <li><a href="https://bendlikeabamboo.github.io/barangay-boundaries-repository/boundaries/download.html" target="_blank" rel="noopener">Barangay boundaries</a></li>
+        <li><a href="https://www.coa.gov.ph/wpfd_file/tagum-city-annual-audit-report-2024/" target="_blank" rel="noopener">Tagum 2024 COA report</a></li>
+      </ul>
+    </section>
+  </div>
+</section>
+</main>
+<footer><div class="wrap small">Pilot for screening public records. Verify each flag against the source documents before reporting a finding.</div></footer>
+<script id="dataset" type="application/json">__DASHBOARD_DATA__</script>
+<script>
+"use strict";
+const data = JSON.parse(document.getElementById("dataset").textContent);
+const id = name => document.getElementById(name);
+const number = Intl.NumberFormat("en-PH");
+const money = Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP",maximumFractionDigits:2});
+const pct = (value, digits = 1) => (value * 100).toFixed(digits) + "%";
+const projectPageSize = 10;
+const tabs = Array.from(document.querySelectorAll(".tab"));
+const methods = [
+  {label:"TreeSHAP", key:"tree_shap", help:"Negative contributions shorten the model's isolation path. Positive contributions lengthen it."},
+  {label:"Local-DIFFI", key:"local_diffi", help:"Higher values point to features often used on shorter paths in the original forest."},
+  {label:"ExIFFI", key:"exiffi", help:"Higher values identify features emphasized by oblique splits in Extended Isolation Forest."}
+];
+const awardState = {page:0, month:"", selected:null, method:0};
+const tenderState = {page:0, selected:null, method:0};
+const projectState = {page:0, selected:null, projectPoints:[]};
+const node = (tag, label = "", cls = "") => {
+  const element = document.createElement(tag);
+  element.textContent = label;
+  if (cls) element.className = cls;
+  return element;
+};
+const addCell = (row, label, cls = "") => row.appendChild(node("td", label, cls));
+const option = (select, label, value = label) => {
+  const element = node("option", label);
+  element.value = value;
+  select.append(element);
+};
+const signed = (n, digits) => (n > 0 ? "+" : "") + n.toFixed(digits);
+const clean = value => String(value || "").toLocaleLowerCase();
+const awardTitle = d => d.notice_title || d.award_title || "Untitled award";
+const externalLink = (label, url) => {
+  const link = node("a",label);
+  link.href = url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  return link;
+};
+function selectTab(tab, focus = false) {
+  for (const item of tabs) {
+    item.setAttribute("aria-selected", String(item === tab));
+    item.tabIndex = item === tab ? 0 : -1;
+    id(item.dataset.section).hidden = item !== tab;
+  }
+  if (focus) tab.focus();
+  if (tab.dataset.section === "infrastructure") renderProjects();
+  if (tab.dataset.section === "saved") renderSavedReviews();
+}
+tabs.forEach((tab, index) => {
+  tab.addEventListener("click", () => selectTab(tab));
+  tab.addEventListener("keydown", event => {
+    const indices = {ArrowLeft:index - 1,ArrowRight:index + 1,Home:0,End:tabs.length - 1};
+    if (Object.hasOwn(indices,event.key)) {
+      event.preventDefault();
+      selectTab(tabs[(indices[event.key] + tabs.length) % tabs.length], true);
+    }
+  });
+});
+function drawTimeline() {
+  const max = Math.max(...data.award.monthly.map(row => row.scored));
+  id("timeline").replaceChildren();
+  for (const month of data.award.monthly) {
+    const monthName = new Intl.DateTimeFormat("en",{month:"short",timeZone:"UTC"}).format(new Date(month.month + "-01T00:00:00Z"));
+    const button = node("button","","month");
+    button.title = monthName + " · " + month.scored + " awards · " + month.reviews + " above cutoff";
+    button.setAttribute("aria-label",button.title);
+    button.setAttribute("aria-pressed",String(awardState.month === month.month));
+    const track = node("span","","track");
+    const bar = node("span","","month-bar");
+    const flags = node("i");
+    bar.style.height = (100 * month.scored / max) + "%";
+    flags.style.height = (100 * month.reviews / month.scored) + "%";
+    bar.append(flags);
+    track.append(bar);
+    button.append(track,node("span",monthName));
+    button.onclick = () => {
+      awardState.month = awardState.month === month.month ? "" : month.month;
+      awardState.page = 0;
+      drawTimeline();
+      renderReview("award");
+      const selected = Array.from(id("timeline").children)[data.award.monthly.indexOf(month)];
+      selected.focus({preventScroll:true});
+    };
+    id("timeline").append(button);
+  }
+}
+function awardFilter() {
+  const term = clean(id("awardSearch").value).trim();
+  const category = id("awardCategory").value;
+  return data.award.records.filter(d => (
+    (!id("flagsOnly").checked || d.review) && (!category || d.category === category) &&
+    (!awardState.month || d.award_date.startsWith(awardState.month)) &&
+    (!id("awardLinked").checked || d.bid_reference) &&
+    (!term || [awardTitle(d),d.award_title,d.awardee_name,d.reference_id,d.contract_no,d.record_id,d.official_award_reference,d.bid_reference].some(item => clean(item).includes(term)))
+  ));
+}
+function pageText(page, size, total, word) {
+  if (!total) return "0 " + word;
+  return number.format(page * size + 1) + "–" + number.format(Math.min(total,(page + 1) * size)) + " of " + number.format(total) + " " + word;
+}
+function tenderFilter() {
+  const query = clean(id("tenderSearch").value).trim();
+  const mode = id("tenderMode").value;
+  return data.tender.records.filter(d =>
+    (!id("tenderFlagsOnly").checked || d.review) &&
+    (!mode || d.mode_group === mode) &&
+    (!query || [d.notice_title,d.bid_reference,d.solicitation_number].some(value => clean(value).includes(query)))
+  );
+}
+const reviewPageSize = 10;
+const reviewViews = {
+  award:{
+    state:awardState, filter:awardFilter, key:"record_id", inspector:"inspector", verb:"awards",
+    title:awardTitle,
+    secondary:d => (d.awardee_name || "Vendor unavailable") + " · " + d.award_date,
+    compact:d => money.format(d.contract_amount),
+    draw:drawAward
+  },
+  tender:{
+    state:tenderState, filter:tenderFilter, key:"bid_reference", inspector:"tenderInspector", verb:"tenders",
+    title:d => d.notice_title || "Untitled tender",
+    secondary:d => "Bid " + d.bid_reference + " · " + d.published_date,
+    compact:d => number.format(d.notice_window_days) + " days",
+    draw:drawTender
+  }
+};
+function renderReview(kind, selected = null, fromClick = false) {
+  const view = reviewViews[kind];
+  const state = view.state;
+  const filtered = view.filter();
+  const first = state.page * reviewPageSize;
+  const visible = filtered.slice(first,first + reviewPageSize);
+  const active = visible.find(d => d[view.key] === (selected || state.selected)) || visible[0];
+  state.selected = active?.[view.key];
+  const table = id(kind + "Table");
+  table.replaceChildren();
+  for (const d of visible) {
+    const chosen = d[view.key] === state.selected;
+    const row = node("tr","",chosen ? "active" : "");
+    addCell(row,number.format(d.rank),"num");
+    const cell = addCell(row,"");
+    const button = node("button",view.title(d),"case-button");
+    button.setAttribute("aria-pressed",String(chosen));
+    button.onclick = () => renderReview(kind,d[view.key],true);
+    const subtitle = node("span",view.secondary(d),"case-sub");
+    if (kind === "award" && d.bid_reference) subtitle.append(node("span"," · Linked tender","linked-label"));
+    const caseStatus = node("span","","saved-label");
+    caseStatus.dataset.reviewKey = reviewKey(kind,d);
+    subtitle.append(caseStatus);
+    cell.append(button,subtitle);
+    addCell(row,view.compact(d),"num hide-small");
+    addCell(row,d.anomaly_score.toFixed(4),"num");
+    table.append(row);
+    if (fromClick && chosen) button.focus({preventScroll:true});
+  }
+  if (!visible.length) {
+    const row = node("tr");
+    addCell(row,"No " + view.verb + " match these filters.").colSpan = 4;
+    table.append(row);
+  }
+  id(kind + "Range").textContent = pageText(state.page,reviewPageSize,filtered.length,view.verb) + (state.month ? " · " + state.month : "");
+  id(kind + "Prev").disabled = state.page === 0;
+  id(kind + "Next").disabled = first + reviewPageSize >= filtered.length;
+  view.draw(active);
+  paintQueueStatuses(kind);
+  if (fromClick && window.matchMedia("(max-width: 840px)").matches) {
+    id(view.inspector).scrollIntoView({
+      behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",block:"start"
+    });
+  }
+}
+function factBlock(items) {
+  const dl = node("dl","","case-facts");
+  for (const [label,value,wide] of items) {
+    const item = node("div","",wide ? "wide" : "");
+    item.append(node("dt",label),node("dd",value));
+    dl.append(item);
+  }
+  return dl;
+}
+function scoreFacts(d,model) {
+  return [
+    ["Isolation Forest score / cutoff",d.anomaly_score.toFixed(6) + " / " + model.cutoffs["Isolation Forest"].toFixed(6)],
+    ["Extended Forest score / cutoff",d.extended_score.toFixed(6) + " / " + model.cutoffs["Extended Isolation Forest"].toFixed(6)]
+  ];
+}
+function reviewBadge(d) {
+  return node("span",d.review ? "Above cutoff" : "Within cutoff","pill " + (d.review ? "amber" : "teal"));
+}
+function drawTenderEvidence(container,d) {
+  const box = node("div","","source-card");
+  box.append(node("h3","PhilGEPS evidence"));
+  if (!d.official_award_reference) {
+    box.append(node("p","No official award match in these releases.","sub"));
+  } else if (!d.bid_reference) {
+    box.append(node("p","Award ID " + d.official_award_reference + " · Tender ID unavailable","sub"));
+    if (d.official_procurement_mode) box.append(node("p",d.official_procurement_mode,"small"));
+  } else {
+    box.append(factBlock([
+      ["Official award ID",d.official_award_reference],["Official bid ID",d.bid_reference],
+      ["Tender approved budget",money.format(d.approved_budget_php)],
+      ["Bid window",number.format(d.notice_window_days) + " days"],
+      ["Published / closing date",d.published_date + " / " + d.closing_date,true],
+      ["Procurement mode",d.procurement_mode,true],
+      ["Observed award total for tender",money.format(d.observed_official_award_total_php),true]
+    ]));
+    box.append(node("p","The approved budget applies to the full tender. The observed total covers awards present in the official extracts.","small"));
+    box.append(externalLink("Open PhilGEPS bid notice",d.official_notice_link));
+  }
+  container.append(box);
+}
+function drawAward(d) {
+  const container = id("inspector");
+  container.replaceChildren(node("h2","Award explanation"));
+  if (!d) {
+    container.append(node("p","Choose an award from the review queue.","sub"));
+    return;
+  }
+  container.append(
+    reviewBadge(d),node("h3",awardTitle(d),"case-title"),
+    node("p",(d.awardee_name || "Vendor unavailable") + " · " + d.category,"sub case-vendor"),
+    factBlock([
+      ["Award date",d.award_date],["Award amount",money.format(d.contract_amount)],
+      ...scoreFacts(d,data.award),
+      ["Local contract number",d.contract_no || "Unavailable in archive",true],
+      ["Archive record ID",d.record_id,true]
+    ])
+  );
+  drawTenderEvidence(container,d);
+  drawCaseReview(container,"award",d);
+  addExplanation(container,d,data.award,awardState,[
+    money.format(d.peer_median_php) + " median · " + d.peer_scope.toLowerCase(),
+    d.vendor_share_pct.toFixed(2) + "% of prior 365-day awards",
+    number.format(d.vendor_category_30d) + " in prior 30 days",
+    number.format(d.days_to_quarter_end) + " calendar days",
+    number.format(d.category_365d) + " in prior 365 days"
+  ]);
+  if (d.scenario) drawScenario(container,d.scenario,data.award,{
+    title:"What if the award amount changed?",
+    eligibility:"This category has too few training awards to compare amounts.",
+    guidance:"Test amounts observed in the same business category.",
+    inputLabel:"Hypothetical amount",
+    inputId:"scenarioSlider",
+    field:"amount",
+    format:x => money.format(x)
+  });
+}
+function drawTender(d) {
+  const container = id("tenderInspector");
+  container.replaceChildren(node("h2","Tender explanation"));
+  if (!d) {
+    container.append(node("p","Choose a tender from the review queue.","sub"));
+    return;
+  }
+  container.append(
+    reviewBadge(d),node("h3",d.notice_title || "Untitled tender","case-title"),
+    node("p",d.procurement_mode + " · " + d.classification,"sub case-vendor"),
+    factBlock([
+      ["Official bid ID",d.bid_reference],["Solicitation number",d.solicitation_number || "Unavailable"],
+      ["Approved budget (ABC)",money.format(d.approved_budget_php)],
+      ["Bid window",number.format(d.notice_window_days) + " days"],
+      ["Published",d.published_date],["Closing date",d.closing_date],
+      ...scoreFacts(d,data.tender),
+      ["Status in the extract",d.bid_notice_status || "Unavailable"],
+      ["Awards in official extracts",number.format(d.observed_official_awards)]
+    ])
+  );
+  const box = node("div","","source-card");
+  box.append(node("h3","Source record"),externalLink("Open PhilGEPS bid notice",d.official_notice_link));
+  box.append(node("p","Check the current notice and any bid bulletins before recording a review.","small"));
+  if (d.observed_official_awards === 0) {
+    box.append(node("p","Award details are unavailable in these releases for this tender.","small"));
+  }
+  container.append(box);
+  drawCaseReview(container,"tender",d);
+  addExplanation(container,d,data.tender,tenderState,[
+    money.format(d.budget_peer_median_php) + " median · " + d.budget_peer_group.toLowerCase(),
+    d.window_peer_median_days + " days median · " + d.window_peer_group.toLowerCase(),
+    d.prior_mode_share.toFixed(2) + "% of prior 365-day tenders",
+    d.prior_class_share.toFixed(2) + "% of prior 365-day tenders",
+    number.format(d.days_to_quarter_end) + " calendar days"
+  ]);
+  if (d.scenario) drawScenario(container,d.scenario,data.tender,{
+    title:"What if the bid window changed?",
+    eligibility:"This mode has too few training tenders to compare bid windows.",
+    guidance:"Test window lengths observed in the same procurement mode.",
+    inputLabel:"Hypothetical bid window",
+    inputId:"tenderScenarioSlider",
+    field:"days",
+    format:x => number.format(x) + " days"
+  });
+}
+function addExplanation(container,d,model,state,inputValues) {
+  const explanation = node("div","","inspector-divider");
+  explanation.append(node("h3","Feature contributions"));
+  const selector = node("div","","methods");
+  const body = node("div");
+  methods.forEach((method,i) => {
+    const button = node("button",method.label);
+    button.setAttribute("aria-pressed",String(state.method === i));
+    button.addEventListener("click", () => {
+      state.method = i;
+      Array.from(selector.children).forEach((element,j) => element.setAttribute("aria-pressed",String(i === j)));
+      drawExplanation(body,d,model,methods[state.method],inputValues);
+    });
+    selector.append(button);
+  });
+  explanation.append(selector,body);
+  drawExplanation(body,d,model,methods[state.method],inputValues);
+  container.append(explanation);
+}
+function drawExplanation(body,d,model,method,inputValues) {
+  const diverges = method.key === "tree_shap";
+  const values = d[method.key];
+  const maximum = Math.max(...values.map(Math.abs),0.000001);
+  body.replaceChildren(node("p",method.help,"sub"));
+  const chart = node("div","","chart");
+  const order = values.map((_,i) => i).sort((a,b) => diverges ? values[a] - values[b] : values[b] - values[a]);
+  for (const index of order) {
+    const value = values[index];
+    const row = node("div","","bar-row");
+    const label = node("div",model.features[index],"bar-label");
+    label.append(node("span",inputValues[index]));
+    const track = node("div","","bar-track" + (diverges ? " diverging" : ""));
+    track.setAttribute("aria-hidden","true");
+    const bar = node("div","","bar" + (value < 0 ? " short" : ""));
+    const width = Math.abs(value) / maximum * (diverges ? 50 : 100);
+    bar.style.width = width + "%";
+    bar.style.left = (diverges ? 50 - (value < 0 ? width : 0) : 0) + "%";
+    track.append(bar);
+    row.append(label,track,node("div",diverges ? signed(value,3) : value.toFixed(4),"bar-number"));
+    chart.append(row);
+  }
+  body.append(chart);
+  if (diverges) body.append(node("p","Average path length is " + d.tree_path_length.toFixed(3) + " splits. The baseline is " + model.tree_base.toFixed(3) + " splits.","case-note"));
+}
+function drawScenario(container,scenario,model,config) {
+  const box = node("div","","inspector-divider");
+  box.append(node("h3",config.title));
+  if (!scenario.points.length) {
+    box.append(node("p",config.eligibility,"sub"));
+    container.append(box);
+    return;
+  }
+  box.append(node("p",config.guidance,"sub"));
+  const label = node("label",config.inputLabel,"slider-label");
+  label.htmlFor = config.inputId;
+  const slider = node("input","","scenario-slider");
+  slider.type = "range";
+  slider.id = config.inputId;
+  slider.min = 0;
+  slider.max = scenario.points.length - 1;
+  slider.value = scenario.closest
+    ? scenario.points.findIndex(point => point[config.field] === scenario.closest[config.field])
+    : Math.floor(scenario.points.length / 2);
+  const output = node("div","","scenario-readout");
+  output.setAttribute("aria-live","polite");
+  const cutoff = model.cutoffs["Isolation Forest"];
+  const refresh = () => {
+    const point = scenario.points[Number(slider.value)];
+    const value = config.format(point[config.field]);
+    slider.setAttribute("aria-valuetext",value);
+    output.replaceChildren(
+      node("strong",value),document.createTextNode(" · score " + point.score.toFixed(6) + " · "),
+      node("span",point.score > cutoff ? "Above cutoff" : "Within cutoff","pill " + (point.score > cutoff ? "amber" : "teal"))
+    );
+  };
+  slider.addEventListener("input",refresh);
+  refresh();
+  const summary = scenario.closest
+    ? config.format(scenario.closest[config.field]) + " was the closest tested value within the model cutoff."
+    : "All tested values stayed above the model cutoff.";
+  box.append(label,slider,output,node("p",summary + " This is a model sensitivity test.","case-note"));
+  container.append(box);
+}
+function projectFilter() {
+  const term = clean(id("dpwhSearch").value).trim();
+  const area = id("dpwhBarangay").value;
+  return data.projects.filter(d => (
+    (!area || (area === "unmapped" ? !d.barangay : d.barangay === area)) &&
+    (!id("dpwhFlood").checked || d.flood_map_project_id) &&
+    (!term || [d.title,d.dpwh_contract_id,d.status,d.flood_map_project_id,d.flood_map_component_id].some(item => clean(item).includes(term)))
+  )).sort((a,b) => {
+    if (id("dpwhSort").value === "variance") {
+      return (b.variance_days ?? -Infinity) - (a.variance_days ?? -Infinity) || b.infra_year - a.infra_year;
+    }
+    return b.infra_year - a.infra_year || a.dpwh_contract_id.localeCompare(b.dpwh_contract_id);
+  });
+}
+function drawProjectDetail(d) {
+  const detail = id("mapDetail");
+  if (!d) {
+    detail.replaceChildren(node("span","Select a project to view its location evidence and official record."));
+    return;
+  }
+  const heading = node("strong",d.dpwh_contract_id + " · " + (d.barangay || "Unmapped"));
+  detail.replaceChildren(heading,node("div",d.location_basis + " · " + d.status));
+  if (d.flood_map_project_id) {
+    detail.append(node("div","Flood-map project " + d.flood_map_project_id + " · " + d.flood_map_component_id));
+  }
+  if (/^[a-zA-Z0-9]+$/.test(d.dpwh_contract_id)) {
+    detail.append(externalLink("Open the DPWH record","https://transparency.dpwh.gov.ph/projects/" + d.dpwh_contract_id));
+  }
+}
+function renderProjects(focusKey = null) {
+  if (id("infrastructure").hidden) return;
+  const filtered = projectFilter();
+  const first = projectState.page * projectPageSize;
+  const visible = filtered.slice(first,first + projectPageSize);
+  const table = id("dpwhTable");
+  table.replaceChildren();
+  let selected = filtered.find(d => d.dpwh_contract_id === projectState.selected);
+  projectState.selected = selected?.dpwh_contract_id || null;
+  for (const d of visible) {
+    const row = node("tr","",d.dpwh_contract_id === projectState.selected ? "active" : "");
+    const cell = addCell(row,"");
+    const select = node("button",d.title,"case-button");
+    select.setAttribute("aria-pressed",String(d.dpwh_contract_id === projectState.selected));
+    select.onclick = () => {
+      projectState.selected = d.dpwh_contract_id;
+      renderProjects(d.dpwh_contract_id);
+    };
+    cell.append(select,node("span",d.dpwh_contract_id + " · " + d.infra_year + " · " + (d.barangay || "Unmapped"),"case-sub"));
+    addCell(row,d.variance_days == null ? "—" : signed(d.variance_days,0) + " d","num");
+    if (d.cost_abc_ratio == null) addCell(row,"—","num hide-small");
+    else addCell(row,pct(d.cost_abc_ratio,2),"num hide-small");
+    table.append(row);
+    if (d.dpwh_contract_id === focusKey) select.focus({preventScroll:true});
+  }
+  if (!visible.length) {
+    const row = node("tr");
+    addCell(row,"No projects match these filters.").colSpan = 3;
+    table.append(row);
+  }
+  id("dpwhRange").textContent = pageText(projectState.page,projectPageSize,filtered.length,"projects");
+  id("dpwhTotal").textContent = number.format(filtered.length);
+  id("dpwhMapped").textContent = number.format(filtered.filter(d => d.barangay).length);
+  id("dpwhDates").textContent = number.format(filtered.filter(d => d.variance_days != null).length);
+  id("dpwhPrev").disabled = projectState.page === 0;
+  id("dpwhNext").disabled = first + projectPageSize >= filtered.length;
+  drawProjectDetail(selected);
+  drawMap(filtered);
+}
+const polygons = data.barangays.features.map(feature => ({
+  name:feature.properties.name,
+  groups:feature.geometry.type === "MultiPolygon" ? feature.geometry.coordinates : [feature.geometry.coordinates]
+}));
+const points = polygons.flatMap(area => area.groups.flatMap(group => group.flat()));
+const lonLow = Math.min(...points.map(p => p[0]));
+const lonHigh = Math.max(...points.map(p => p[0]));
+const latLow = Math.min(...points.map(p => p[1]));
+const latHigh = Math.max(...points.map(p => p[1]));
+function drawMap(filtered) {
+  const canvas = id("map");
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.ceil(rect.width * dpr);
+  canvas.height = Math.ceil(rect.height * dpr);
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr,dpr);
+  const cosine = Math.cos((latHigh + latLow) * Math.PI / 360);
+  const width = (lonHigh - lonLow) * cosine;
+  const height = latHigh - latLow;
+  const scale = Math.min((rect.width - 22) / width, (rect.height - 22) / height);
+  const x0 = (rect.width - width * scale) / 2;
+  const y0 = (rect.height - height * scale) / 2;
+  const place = ([lon,lat]) => [x0 + (lon - lonLow) * cosine * scale,y0 + (latHigh - lat) * scale];
+  for (const area of polygons) {
+    ctx.beginPath();
+    for (const group of area.groups) {
+      for (const ring of group) {
+        ring.forEach((coordinate,i) => {
+          const [x,y] = place(coordinate);
+          if (i === 0) ctx.moveTo(x,y);
+          else ctx.lineTo(x,y);
+        });
+        ctx.closePath();
+      }
+    }
+    ctx.fillStyle = id("dpwhBarangay").value === area.name ? "#a4dcd0" : "#d0e5dd";
+    ctx.fill("evenodd");
+    ctx.strokeStyle = "#6c9089";
+    ctx.lineWidth = .75;
+    ctx.stroke();
+  }
+  projectState.projectPoints = filtered.filter(d => d.barangay).map(d => {
+    const [x,y] = place([d.lon,d.lat]);
+    return {d,x,y};
+  });
+  const chosen = projectState.projectPoints.find(p => p.d.dpwh_contract_id === projectState.selected);
+  const placed = projectState.projectPoints.filter(p => p !== chosen);
+  if (chosen) placed.push(chosen);
+  for (const {d,x,y} of placed) {
+    const active = d.dpwh_contract_id === projectState.selected;
+    ctx.beginPath();
+    ctx.arc(x,y,active ? 5.6 : 2.7,0,2 * Math.PI);
+    ctx.fillStyle = active ? "#ad6025" : "#176d65cc";
+    ctx.fill();
+    if (active) {
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke();
+    }
+  }
+}
+id("map").addEventListener("click",event => {
+  const rect = id("map").getBoundingClientRect();
+  const gap = p => Math.hypot(p.x - (event.clientX - rect.left),p.y - (event.clientY - rect.top));
+  const nearby = projectState.projectPoints.filter(p => gap(p) <= 13).sort((a,b) => gap(a) - gap(b))[0];
+  if (nearby) {
+    projectState.selected = nearby.d.dpwh_contract_id;
+    projectState.page = Math.floor(projectFilter().findIndex(d => d.dpwh_contract_id === projectState.selected) / projectPageSize);
+    renderProjects();
+  }
+});
+new ResizeObserver(() => {
+  if (!id("infrastructure").hidden) drawMap(projectFilter());
+}).observe(id("map"));
+function renderTable(container,headers,records) {
+  const table = node("table");
+  const head = node("thead");
+  const header = node("tr");
+  headers.forEach(h => {const th = node("th",h);th.scope = "col";header.append(th);});
+  head.append(header);
+  const body = node("tbody");
+  records.forEach(fields => {
+    const row = node("tr");
+    fields.forEach(value => addCell(row,value));
+    body.append(row);
+  });
+  table.append(head,body);
+  container.replaceChildren(table);
+}
+function renderCoverage() {
+  const d = data.coverage;
+  id("coverageNote").textContent = number.format(d.archive_awards) + " archived award rows and " +
+    number.format(d.official_awards) + " official awards reconcile to " + number.format(d.award_register_rows) +
+    " register rows after " + number.format(d.linked_awards) + " one-to-one matches. " +
+    number.format(d.unresolved_register_rows) + " register rows have possible overlaps.";
+  renderTable(
+    id("coverageTable"),["Year","Archive awards","Official awards","Matches","Register rows","Official tenders"],
+    d.annual.map(row => [
+      row.year,number.format(row.archive_awards),number.format(row.official_awards),
+      number.format(row.matches),number.format(row.award_register_rows),number.format(row.official_tenders)
+    ])
+  );
+  id("sourceDateNote").textContent = "Official award coverage ends " + d.latest_official_award_date +
+    ". Tenders extend through " + d.latest_tender_publication_date +
+    ". Where an archive award matches an official tender, its evidence appears in the award review.";
+}
+function renderValidation(kind) {
+  const model = data[kind];
+  const m = model.metrics;
+  const periodNames = ["Warm-up","Training","Calibration","Evaluation"];
+  const periods = periodNames.map(name => model.periods.find(d => d.split === name));
+  const cutoff = model.cutoffs["Isolation Forest"];
+  id("awardValidation").setAttribute("aria-pressed",String(kind === "award"));
+  id("tenderValidation").setAttribute("aria-pressed",String(kind === "tender"));
+  id("splitNote").textContent = number.format(model.calibration_review_count) + " of " +
+    number.format(periods[2].usable_rows) + " calibration rows exceeded the Isolation Forest cutoff of " +
+    cutoff.toFixed(6) + ". " + number.format(m.n_both) + " evaluation rows exceeded both model cutoffs.";
+  renderTable(id("splitTable"),["Period","Date range","Rows","Used in model"],
+    periods.map(row => [
+      row.split,row.start.slice(0,10) + " – " + row.end.slice(0,10),
+      number.format(row.rows),number.format(row.usable_rows)
+    ])
+  );
+  const stability = m.stability;
+  const sensitivity = kind === "award" ? m.amount_scenarios : m.window_scenarios;
+  const entries = [["Max. TreeSHAP path error",m.maximum_shap_error.toExponential(2) + " splits"]];
+  if (stability.refits) entries.push(
+    ["Mean score rank agreement (Spearman)",stability.score_rank_spearman.toFixed(3)],
+    ["TreeSHAP top feature agreement",pct(stability.tree_shap_top_feature_agreement)],
+    ["Local-DIFFI top feature agreement",pct(stability.local_diffi_top_feature_agreement)],
+    ["What-if cases crossing cutoff",number.format(sensitivity.flipped) + " of " + number.format(sensitivity.eligible)]
+  );
+  renderTable(id("explanationMetrics"),["Measure","Result"],entries);
+  if (stability.refits) id("explanationMetrics").append(node("p","Rank and feature agreement use " + stability.refits + " alternate model seeds.","sub"));
+  const experiment = kind === "award"
+    ? "The vendor scenario assigns 12 earlier awards in the same category to the selected vendor."
+    : "The tender scenarios change the reported budget, the bid window, or both.";
+  id("stressNote").textContent = "Each test changed about 5% of eligible held-out rows in " +
+    m.stress_trials_per_scenario + " trials. " + experiment + " The metrics describe simulated changes.";
+  renderTable(id("stressTable"),["Scenario","Method","Changes per trial","Average precision","Recall above cutoff","Paired score wins"],
+    m.scenarios.map(row => [row.scenario,row.method,row.substitutions_per_trial + " / " + number.format(row.eligible_awards),pct(row.ap),pct(row.recall),pct(row.paired_win)]));
+}
+__REVIEW_WORKFLOW__
+const categories = Array.from(new Set(data.award.records.map(d => d.category))).sort((a,b) => a.localeCompare(b));
+const tenderModes = Array.from(new Set(data.tender.records.map(d => d.mode_group))).sort((a,b) => a.localeCompare(b));
+categories.forEach(category => option(id("awardCategory"),category));
+tenderModes.forEach(mode => option(id("tenderMode"),mode));
+polygons.map(area => area.name).sort().forEach(area => option(id("dpwhBarangay"),area));
+id("awardCount").textContent = number.format(data.award.records.length);
+id("flagCount").textContent = number.format(data.award.metrics.n_flags);
+id("linkedFlagCount").textContent = number.format(data.coverage.award_flags_with_official_tender);
+id("tenderCount").textContent = number.format(data.tender.records.length);
+id("tenderFlagCount").textContent = number.format(data.tender.metrics.n_flags);
+id("allTenderCount").textContent = number.format(data.coverage.official_tenders);
+for (const [kind, controls] of [
+  ["award",["awardSearch","awardCategory","flagsOnly","awardLinked"]],
+  ["tender",["tenderSearch","tenderMode","tenderFlagsOnly"]]
+]) {
+  const state = reviewViews[kind].state;
+  for (const name of controls) {
+    id(name).addEventListener(name.endsWith("Search") ? "input" : "change",() => {
+      state.page = 0;
+      renderReview(kind);
+    });
+  }
+  id(kind + "Prev").onclick = () => {state.page--;renderReview(kind);};
+  id(kind + "Next").onclick = () => {state.page++;renderReview(kind);};
+}
+["dpwhSearch","dpwhBarangay","dpwhSort","dpwhFlood"].forEach(control => id(control).addEventListener(
+  control === "dpwhSearch" ? "input" : "change",
+  () => {projectState.page = 0;renderProjects();}
+));
+id("dpwhPrev").onclick = () => {projectState.page--;renderProjects();};
+id("dpwhNext").onclick = () => {projectState.page++;renderProjects();};
+id("awardValidation").onclick = () => renderValidation("award");
+id("tenderValidation").onclick = () => renderValidation("tender");
+initializeReviewWorkflow();
+drawTimeline();
+renderReview("award");
+renderReview("tender");
+renderCoverage();
+renderValidation("award");
+</script>
+</body>
+</html>

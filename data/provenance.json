@@ -1,0 +1,26 @@
+{
+  "extracted_utc": "2026-11-15",
+  "philgeps": {
+    "source": "https://huggingface.co/datasets/bettergovph/philgeps-data/resolve/b98de579579e8c7e79bac2a22ac7491549db6d0d/philgeps.parquet",
+    "sha256": "9bfa9e7cbf5041dc3b51a4c2742e60a43d1615f119955581d4b155bf3a6d4a8b",
+    "buyer": "CITY OF TAGUM, DAVAO DEL NORTE",
+    "input_rows": 11780,
+    "inactive_or_nonpositive_removed": 0,
+    "observational_duplicates_removed": 475,
+    "rows_written": 11305
+  },
+  "dpwh": {
+    "source": "https://lovethephilippines.com/data/files/dpwh_projects.csv.gz",
+    "sha256": "9a73f97f75ccd1ab8cc2f9f210e3305d056116183128b2988d07a1c2d9b432b2",
+    "input_rows": 248550,
+    "rows_written": 336,
+    "mapped_rows": 235,
+    "valid_variance_rows": 300,
+    "valid_ratio_rows": 304
+  },
+  "boundaries": {
+    "source": "https://github.com/bendlikeabamboo/barangay-boundaries-repository/releases/download/v2026.4.13.0/barangay-boundaries-2023-10-24-hierarchical.zip",
+    "sha256": "cbf0a3f08c1284dd6d5ce385fd656e94e7e848c495bb5407a332d3da307a9415",
+    "barangays": 23
+  }
+}

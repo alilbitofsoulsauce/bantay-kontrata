@@ -1,0 +1,21 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Locally generated working copies
+/tagum_review/
+/staged-*/
+/review-*/
+
+# Reviewer exports and backups
+Tagum_reviews_*.csv
+Tagum_reviews_*.json

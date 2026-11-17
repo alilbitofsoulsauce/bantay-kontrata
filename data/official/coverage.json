@@ -1,0 +1,30 @@
+{
+  "raw_tagum_rows": 5842,
+  "tagum_tenders": {
+    "2024": 1403,
+    "2025": 1476,
+    "2026": 516
+  },
+  "latest_tender_published_date": "2026-09-26",
+  "tagum_awards": {
+    "2024": 1871,
+    "2025": 1322
+  },
+  "latest_award_date": "2025-09-29",
+  "tenders_with_abc": 3395,
+  "tenders_with_both_dates": 3395,
+  "tenders_with_mode": 3395,
+  "tenders_with_budget_dates_and_mode": 3395,
+  "award_rows_with_positive_abc": 3193,
+  "awards_with_bid_ref": 2531,
+  "awards_with_awardee": 3193,
+  "awards_linkable_to_tenders_export": 2531,
+  "strict_old_2025_links": 803,
+  "strict_old_review_flag_links": 63,
+  "strict_old_2025_links_with_bid_ref": 689,
+  "strict_old_review_flag_links_with_bid_ref": 43,
+  "verified_abstract_notices": 11,
+  "verified_abstract_archive_links": 14,
+  "dpwh_flood_matches": 10,
+  "total_dpwh_flood_rows": 10
+}
