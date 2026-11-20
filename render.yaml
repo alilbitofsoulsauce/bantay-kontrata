@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: bantay-kontrata-tagum
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt -r requirements-app.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 wsgi:app
+    healthCheckPath: /api/health
+    disk:
+      name: bantay-kontrata-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: BANTAY_TRUSTED_HOSTS
+        value: "*"
+      - key: BANTAY_TRUSTED_PROXY
+        value: "1"
+      - key: BANTAY_DB_PATH
+        value: /var/data/reviews.sqlite3
+      - key: BANTAY_REVIEW_TOKEN
+        sync: false

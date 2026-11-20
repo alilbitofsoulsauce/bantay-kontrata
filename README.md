@@ -1,156 +1,157 @@
 # Bantay-Kontrata Tagum
 
-An explainable procurement review app for City of Tagum awards, published tenders, and DPWH projects. The official procurement extracts use **CITY OF TAGUM, DAVAO DEL NORTE** as the buyer. Scores prioritize records for manual verification.
+**Explainable AI (XAI) Public Procurement & Infrastructure Audit Web Application for the City of Tagum, Davao del Norte.**
 
-This release supports a retrospective review pilot on a single workstation or browser profile. The dashboard dates show what the snapshot covers. The latest official award is dated September 29, 2025. The latest included tender was published September 26, 2026.
+Bantay-Kontrata Tagum pairs dual unsupervised anomaly detectors (**Standard Isolation Forest** and **Extended Isolation Forest**) with a **four-pillar Explainable AI (XAI) engine** to help **Bids and Awards Committee (BAC) staff**, **Commission on Audit (COA) resident auditors**, **internal audit units**, and **civic monitors** prioritize records for document-backed verification.
 
-## Run the app
+Every anomaly score is decomposed into transparent, human-verifiable audit leads grounded in **Republic Act No. 9184** and **Republic Act No. 12009 (New Government Procurement Act, IRR Feb 2025)** across **12,300 reconciled award register rows**, **3,395 official PhilGEPS tenders**, and **336 DPWH infrastructure projects** mapped across Tagum City's **23 barangays**.
 
-From a Python 3.12 environment, clone the repository and start the app.
+> **Methodological Principle:** Model scores and XAI attributions prioritize records and point reviewers to specific procurement documents—they are never standalone findings of irregularity. Always verify flagged cases against official notices, bid bulletins, BAC resolutions, abstracts of bids/quotations, and signed contracts.
 
-    git clone https://github.com/alilbitofsoulsauce/bantay-kontrata.git
-    cd bantay-kontrata
-    python -m pip install -r requirements-app.txt
-    python app.py
+---
 
-Open **http://127.0.0.1:8000**. The app serves the bundled data and saves reviews to `instance/bantay-kontrata.sqlite3`. The same reviews are available when you restart the app or switch browser profiles on that workstation. Use **Saved reviews → Import backup** to bring in a JSON backup made with the same snapshot. Use **Download backup** to make a portable copy of the saved reviews.
+## Quick Start (Local Workstation)
 
-The app listens on the local workstation. For use by an agency team across devices, place that deployment under agency-managed access control. To choose another local port or an agency-approved database file location, use `python app.py --port 8080 --db PATH`.
+From Python 3.12+ in the repository root:
 
-## Rebuild the data and dashboard
+```bash
+python -m pip install -r requirements.txt -r requirements-app.txt
+python app.py
+```
 
-| Goal | Start here |
-|---|---|
-| Open the offline dashboard | Open **review/Bantay_Kontrata_Dashboard.html** directly in a browser. The review queues, charts, and map work offline. Official notice and project links open the publishers' websites. |
-| Rerun in Google Colab | Open **Bantay_Kontrata_Tagum.ipynb** from this GitHub repository in Colab and select **Runtime → Run all**. The notebook fetches the repository in a fresh runtime. Download the rebuilt files from **tagum_review**. |
-| Rerun on a computer | Use Python 3.12 from the project root. See the commands below. |
-| Read the methodology | Open **docs/Bantay_Kontrata_Tagum_Guide.pdf**. |
+Open **http://127.0.0.1:8000**.
+- Case reviews and revision history persist to `instance/bantay-kontrata.sqlite3`.
+- All **Live XAI** endpoints (pre-publication tender triage, custom award scoring, multi-feature what-if simulation, and dynamic 2D decision surfaces) run locally with zero external API dependencies.
+- For offline field use without a Python server, open `review/Bantay_Kontrata_Dashboard.html` directly in any modern browser.
 
-    python -m pip install -r requirements.txt -r requirements-app.txt
-    python publish_dashboard.py --output tagum_review
-    python -m unittest discover -s tests -v
+---
 
-Open the rebuilt dashboard and tables from `tagum_review/`.
+## Deploy Anywhere (Docker, Render, Railway, or Agency Server)
 
-To review that rebuilt snapshot in the app, start it with `python app.py --dashboard tagum_review/Bantay_Kontrata_Dashboard.html`. Each snapshot has its own reviews in the database. Start the app with an earlier dashboard file to reopen reviews from that snapshot.
+The web application ships ready for containerized, cloud PaaS, or intranet agency deployment:
 
-## Repository layout
-
-| Path | Contents |
-|---|---|
-| `app.py` | Local web server and SQLite review storage |
-| `data/` | Pipeline inputs and source provenance |
-| `data/supplemental/Bantay_Kontrata_Additional_Datasets.zip` | The complete standalone dataset supplement, including its own manifest and coverage notes |
-| `review/` | The ready-to-open dashboard, ranked tables, crosswalks, and validation report |
-| `tests/` | App, reconciliation, model, and refresh tests |
-| `docs/` | The field guide and the original research brief under `docs/reference/` |
-
-Run the scripts from the repository root and keep the directory layout. Use the setup above when the field guide refers to the original distribution archive. Git ignores local environment files, generated working copies, and reviewer exports.
-
-## Review a real case
-
-1. Open **Award review** or **Tender review** and select a record. Use **Flagged only** to focus on model flags, or clear it to examine records below the cutoff. Use **Review status** to find unreviewed cases, cases needing documents, or follow-ups.
-2. When **What to verify first** appears, use it to see the input that contributed most toward a higher score and the documents to check. Open the PhilGEPS notice when linked. Compare the buyer, bid ID, mode, budget, and dates. Check amendments and individual award documents before drawing conclusions. If an old notice cannot be opened, use the bid ID or solicitation number to locate a copy. For archive-only awards, also record the archive record ID and any available local contract number.
-3. Choose **Open review form**, select a status, and record the evidence checked or missing. **Reviewed** and **Follow up** require reviewer initials, a reason, and an HTTPS evidence link or an internal document reference. Drafts follow the case when you switch records in the open tab. Save the review before closing the tab.
-4. Use **Saved reviews** to reopen a case or export all recorded decisions to CSV. Download a JSON backup at the end of a session. Keep the matching dashboard HTML with it. Use **Import backup** on that dashboard to resume on another browser or device. Imports add missing reviews. If two versions of a case differ, open the conflict to compare the status, reviewer, evidence, and notes before choosing a version. Keep the source backup and download a copy of the current reviews before replacing any decision you need to retain.
-
-In **Tender review**, **Other notices with this solicitation** shows related scored notices, including those below the cutoff. Compare their titles, dates, budgets, and snapshot statuses. Open the original notices and check the agency records to establish whether they are reposts, revisions, or separate lots. Each bid keeps its own review. For newer postings and awards, use the [modernized PhilGEPS Bulletin Board](https://philgeps.gov.ph/Indexes/index).
-
-| Review status | Use |
-|---|---|
-| In review | A reviewer has started examining the case. |
-| Needs documents | A specific notice, bid bulletin, award document, or other record still needs to be obtained. |
-| Reviewed | The available evidence and the reviewer's conclusion are recorded. |
-| Follow up | The evidence suggests a specific question for further review. Enter the question and the supporting document. |
-
-The app records new review times using the workstation clock and saves the reviews in its database. When opening the standalone HTML file, saved reviews stay in that browser profile. If local storage is unavailable, the standalone file uses the open tab and still supports export and restore. Keep review backups and database files in the same access-controlled location as internal notes. Open source links only when connected. A model flag is a lead for review. Formal findings require the underlying documents and the office's review process.
-
-For an agency pilot, name a custodian for the working dashboard and backups. Save a dated copy of the reviewer's usual picks before opening the evidence. Run the screen alongside the existing review process, using that process for referrals and official case records. Review cases above and below the cutoff against the underlying documents. Record document availability, time per case, the planned next document check, and evidence-backed follow-up in both groups. Agree on what would justify continued use before reviewing the sample.
-
-## How XAI helps reviewers
-
-Explainable AI (XAI) connects a case’s score to a document check. TreeSHAP shows which inputs pushed the Isolation Forest score up or down. The dashboard shows the strongest push toward a higher score alongside the underlying value or peer comparison and a suggested source check. Budget differences point to the notice and amendments. Prior awards to the same vendor point to related award records or purchase orders.
-
-In Tagum bid **12883096**, the snapshot shows a **25-day bid window** and an **11-day median** among recent tenders in the same mode. The bid window made the largest contribution toward a higher score. A reviewer can start by confirming the published and closing dates and checking any deadline extensions. The peer median describes the model’s comparison group. [PhilGEPS notice 12883096](https://notices.philgeps.gov.ph/GEPSNONPILOT/Tender/PrintableBidNoticeAbstractUI.aspx?refid=12883096)
-
-During the pilot, save the blind review results before showing the explanations. Revisit selected cases and record the original document check, the explanation shown, any check it added or corrected, the document involved, and the extra minutes. Record whether an inspected document supported the change or the reviewer still needs it. This measures how often explanations change the review plan and how often staff can support those changes with evidence.
-
-## What the counts mean
-
-| Dataset or linkage | Count | Unit |
-|---|---:|---|
-| Historical award archive, 2017–2025 | 11,305 | Award rows after the archive's observation-level duplicate removal |
-| Official award table, 2024–2025 | 3,193 | Distinct official numeric award IDs |
-| Accepted archive-to-official links | 2,198 | One-to-one links, including 1,395 in 2024 and 803 in 2025 |
-| Combined award register | 12,300 | Retained rows after accepted matches were combined |
-| Possible overlaps | 326 | Register rows involved in 1,765 candidate pairs held for review |
-| Official tenders, 2024–September 2026 | 3,395 | Distinct official numeric bid IDs from 5,842 source rows |
-| Infrastructure | 336 | DPWH contract records, with 235 mapped points and 10 flood-map matches |
-
-The award count is **11,305 + 3,193 − 2,198 = 12,300 register rows**. The merge requires the same date, amount to the cent, normalized awardee, and a matching normalized title. It accepts only unique matches in both directions. It preserves uncertain rows and exposes their candidates separately. The archive's 74 populated 2025 values in **reference_id** match its local contract numbers. The official numeric identifiers have separate fields in the integrated outputs.
-
-The official award table ends September 29, 2025, and the tenders extend through September 26, 2026. The 2026 extracts provide solicitation numbers and notice information for Tagum. The award fields for those records lack dated outcomes. The packaged provenance lists eleven official files, their URLs, and their SHA-256 hashes. [Official PS-PhilGEPS releases](https://philgeps.gov.ph/CmsHomePages/open-data) · [Historical award archive](https://huggingface.co/datasets/bettergovph/philgeps-data)
-
-## Model periods and inputs
-
-| Screen | Warm-up | Training | Calibration | Held-out evaluation |
-|---|---|---|---|---|
-| Historical awards | 2017, 603 rows | 2018–2023, 7,807 | 2024, 1,578 | 2025, 1,317 |
-| Official tenders | Jan–Mar 2024, 302 rows | Apr–Dec 2024, 1,101 | 2025, 1,476 | 2026 through September, 516 |
-
-The award model uses the amount relative to the recent category median, the vendor's share of 365-day city awards, the vendor's same-category awards over 30 days, prior category volume, and days to quarter end. For thin categories, the amount comparison uses the citywide median.
-
-The tender model uses budget relative to its recent peers, bid-window length relative to its recent peers, recent mode share, recent classification share, and days to quarter end. Peer calculations use the previous 365 days and exclude all notices published on the same day. Budget peers first use the same mode and classification, then the same mode, then the citywide history. Window peers use the same mode and fall back to the citywide history. A specific peer group needs at least 15 prior rows. Small Value Procurement labels are grouped for statistical comparison. The dashboard displays the publisher's mode labels. The notification and award outcomes appear as evidence fields. The screens are retrospective because the source snapshots can contain later amendments.
-
-Both screens fit Isolation Forest and Extended Isolation Forest on their training periods. Each detector sets its own 95th-percentile cutoff on calibration scores, using the higher order statistic. An evaluation score must exceed that cutoff to enter the review queue. [Isolation Forest](https://doi.org/10.1109/ICDM.2008.17) · [Extended Isolation Forest](https://arxiv.org/abs/1811.02141)
-
-## Review and validation
-
-The award screen flagged **106 of 1,317** historical 2025 rows. Of those 106, 63 link to an official award and 43 link to a tender with source fields. The tender screen flagged **48 of 516** held-out tenders. Matching official evidence occurs independently of the historical model's scoring.
-
-The 516 evaluated tender notices include 40 solicitation numbers shared by multiple notices. Keeping only the latest prior notice for each known solicitation in each 365-day peer window changed one Isolation Forest flag. Both runs flagged 48 notices, with 47 in common. All 2,879 earlier tender rows lack solicitation numbers, so the training and calibration inputs stayed the same. The dashboard uses the published per-notice scores. Confirm reposts and separate lots in agency records before changing how notices count toward the peer comparison.
-
-TreeSHAP explains the standard forest's average isolation path length. Its negative contributions shorten the path. Local-DIFFI measures feature use on shorter paths. ExIFFI reports feature importance for the model with oblique splits. In the what-if panel, the amount or window changes within the observed training peer values and the remaining model inputs are held fixed. [TreeSHAP](https://shap.readthedocs.io/en/stable/generated/shap.TreeExplainer.html) · [Local-DIFFI](https://arxiv.org/abs/2007.11117) · [ExIFFI](https://arxiv.org/abs/2310.05468)
-
-The synthetic experiments measure how the ranking responds to controlled amount, vendor history, budget, and window changes. They compare both forests with a univariate baseline and record average precision, recall at the fixed cutoff, and paired score wins. The baseline leads the amount-only and budget-only changes. The forests lead the vendor-history scenario by average precision. The extended forest leads the bid-window-only scenario by average precision. Real audit performance requires record-level labels linked to underlying documents.
-
-## Key outputs and fields
-
-| File | Use |
-|---|---|
-| **review/tagum_award_register.csv** | All retained award rows with source, official IDs where available, and a possible-overlap marker |
-| **review/tagum_award_links.csv** | Accepted archive-to-official pairs, match evidence, and any linked tender's details |
-| **review/tagum_possible_award_overlaps.csv** | Review candidates that share the date, amount and vendor, or compete for an exact match |
-| **review/tagum_2025_ranked_awards.csv** | Award model rank, scores, local archive contract number, and official tender evidence |
-| **review/tagum_2026_ranked_tenders.csv** | Tender model rank, scores, published fields, and peer statistics |
-| **review/validation.json** | Coverage counts, stress experiments, path reconstruction, refits, and what-if results |
-| **data/official/** | Official extracts and provenance, verified abstract samples, and the DPWH flood crosswalk |
-| **tests/test_project.py** | Matching, publication-time context, source counts, tender-level award totals, DPWH links, scores, and TreeSHAP checks |
-
-The **bid_reference** identifies an official tender. The **official_award_reference** identifies one official award. The **record_id** identifies a retained record in the integrated register. **observed_official_award_total_php** sums distinct award IDs linked to a bid in the supplied files. Compare it with the whole tender's approved budget. A single award can represent part of a tender. Bidder counts require an Abstract of Bids or another document that explicitly records bids received.
-
-The documented pipeline was rebuilt from the included files. The notebook in a clean directory reproduced the command-line output byte for byte. The browser checks exercised the award and tender filters, links, explanations and sliders, validation, and the DPWH map on desktop and mobile layouts.
-
-## Stage a new official release
-
-Download a quarterly CSV as published, and record its source page. The command below demonstrates reprocessing the included public 2026 Q3 release. For a new release, use its local filename, release label, and source page, and give the staged sources and dashboard their own new directories. [PS-PhilGEPS downloads](https://philgeps.gov.ph/CmsHomePages/open-data)
-
-    python refresh_official.py --input DATASETS_PHILGEPS_2026_JULY-SEPTEMBER.csv --release 2026Q3 --source-page https://drive.google.com/file/d/1enMAqo1VWFwnf01iHPPw9sjNnwjlTWbt/view --output staged-2026Q3
-    python publish_dashboard.py --data staged-2026Q3 --output review-2026Q3
-
-Use `--base-data staged-2026Q3` to stage a later release on top of that copy. Matching quarter labels replace those source rows in the new snapshot. The refresh keeps the fixed historical award and DPWH sources, scopes the new lines to the City of Tagum buyer, records source record numbers and file hashes, and rebuilds the official award and tender tables. It stops before publishing a new source folder when core tender fields conflict or source data fail validation. Open the rebuilt **Validation** tab and compare coverage and review counts with the previous snapshot before using it.
-
-The backup ID depends on the dashboard data and model results. A rebuild in another environment can produce a new ID because of floating-point rounding. Retain the dashboard HTML with its CSV exports and JSON backups so you can reopen prior reviews. The current intake is quarterly and uses release snapshots. Review by an upcoming bid deadline should use the current notice and amendments from the publisher.
-
-## Pilot verification on November 16, 2026
-
-| Notices sampled | Bid IDs | Result |
+| Platform | Configuration File | How to Deploy |
 |---|---|---|
-| Award screen, above cutoff | 12022987, 11622916, 12107378 | All three matched the printed notice fields |
-| Award screen, below cutoff | 11797139, 11743193, 11969783 | All three matched the printed notice fields |
-| Tender screen, above cutoff | 13103239, 13249746, 13157991 | All three matched the printed notice fields |
-| Tender screen, below cutoff | 13092850, 13023417, 12765129 | All three matched the printed notice fields |
+| **Docker / Cloud Run / Fly.io** | `Dockerfile`, `.dockerignore` | `docker build -t bantay-kontrata . && docker run -p 8000:8000 -v bantay-data:/var/lib/bantay-kontrata bantay-kontrata` |
+| **Render** | `render.yaml` | Create a Blueprint instance pointing to this repo; provisions persistent `/var/data` SQLite storage and `/api/health` checks automatically. |
+| **Railway** | `railway.json` | Deploy from GitHub; uses `Dockerfile` and `/api/health` readiness probes out of the box. |
+| **Gunicorn / Procfile** | `wsgi.py`, `Procfile` | `gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 1 --threads 4 --timeout 120 wsgi:app` |
 
-The checks compared the bid ID, buyer, budget, mode, publication date, and closing date. I chose the first, middle, and last ranked linked notice in each group. Bid 13157991 showed **Awarded** on the portal and **Closed** in the extract. The award amount for that notice still requires the award document. This check measures the usability of source links and displayed fields for the sample. [Official bid 13157991](https://notices.philgeps.gov.ph/GEPSNONPILOT/Tender/PrintableBidNoticeAbstractUI.aspx?refid=13157991)
+### Environment Configuration (`.env.example`)
 
-Browser tests verified offline award and tender review, saved decisions after a browser restart, CSV export, JSON restore in a separate mobile browser profile, rejection of another snapshot's backup, and a session backup when storage was blocked. Seven automated tests passed. Reprocessing the official Q3 CSV reproduced the three source tables byte for byte. Real audit effectiveness still needs independently reviewed cases.
+Copy `.env.example` to `.env` (never commit real tokens):
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `HOST` / `PORT` | `127.0.0.1` / `8000` | Bind address and port for `python app.py` or container runtime |
+| `BANTAY_DB_PATH` | `instance/bantay-kontrata.sqlite3` | SQLite database path for optimistic-concurrency reviews and audit history |
+| `BANTAY_DASHBOARD_PATH` | `review/Bantay_Kontrata_Dashboard.html` | Snapshot HTML served at `/` |
+| `BANTAY_DATA_DIR` | `data` | Source CSV directory for `LiveXAIEngine` |
+| `BANTAY_TRUSTED_HOSTS` | `localhost,127.0.0.1` | Comma-separated allowed `Host` headers, or `*` behind cloud load balancers |
+| `BANTAY_TRUSTED_PROXY` | `0` | Set to `1` behind TLS reverse proxies (`ProxyFix` for HTTPS same-origin checks) |
+| `BANTAY_REVIEW_TOKEN` | *(empty)* | Optional shared team token required in `X-Review-Token` (or `Bearer`) for `PUT /api/reviews` |
+
+---
+
+## The Four-Pillar Explainable AI (XAI) Architecture
+
+Standard Isolation Forests act as ensembles of random partitioning trees whose raw binary flags fail audit transparency standards. Bantay-Kontrata Tagum implements four complementary XAI paradigms (`xai_engine.py`, `screen.py`, `tender_screen.py`):
+
+1. **Exact TreeSHAP Path-to-Score Waterfall (`shap.TreeExplainer`)**
+   - Decomposes expected isolation path depth $E[h(x)] = \phi_0 + \sum_{j=1}^d \phi_j(x)$ to machine precision ($<10^{-13}$ splits error) and maps every cumulative step via $s(h) = 2^{-h / c(\tilde{n})}$ directly onto the calibrated 95th-percentile anomaly score scale.
+   - Negative split contributions shorten isolation paths (pushing scores upward toward review); positive contributions lengthen paths (normalizing the record).
+
+2. **Intrinsic Induced-Imbalance Local & Global DIFFI (Carletti et al., 2023)**
+   - Model-specific, perturbation-free interpretability weighting shallower isolation depths alongside internal node **Induced Imbalance Coefficients** $\lambda(k) \in [0.5, 1.0]$.
+   - Computes per-case **Imbalance-Weighted Local-DIFFI** and model-wide **Global-DIFFI** outlier-to-inlier importance ratios.
+
+3. **Extended Isolation Forest (EIF) + ExIFFI Oblique Hyperplanes & 2D Surfaces**
+   - Eliminates axis-aligned orthogonal "ghost zones" using Gaussian random oblique hyperplanes, projecting node sample-inequality gains onto hyperplane normal vectors (**ExIFFI**, Arcudi et al., 2024).
+   - Interactive **2D Decision Surface Explorer** contrasts axis-aligned Isolation Forest vs. oblique Extended Isolation Forest contours on correlated feature pairs (e.g., *Approved Budget vs. Bid Window*, *Contract Amount vs. Vendor Share*, *Cost/ABC Ratio vs. Schedule Delay*).
+
+4. **Constrained Multi-Feature Counterfactual Recourse & Statutory RA 12009 Checks**
+   - Searches mutable procurement levers while locking immutable context (classification, category, filing period) to identify minimal, sparse, policy-grounded adjustments that move a flagged case to or below the calibrated review cutoff.
+   - Pairs algorithmic recourse with deterministic statutory checks under **RA 9184** and **RA 12009**:
+     - Small Value Procurement proximity to the **₱2,000,000** (RA 12009) and **₱1,000,000** (RA 9184) ceilings,
+     - Compressed PhilGEPS solicitation windows (`<7` days for Public Bidding, `<3` days for alternative modes),
+     - Tight `99.5%–100.0%` award-to-ABC price margins,
+     - 30-day same-vendor, same-category award bursts (anti-splitting rule),
+     - Quarter-end fiscal rush (`≤5` days to quarter close) and DPWH schedule overruns (`≥30` days).
+
+---
+
+## Core Web App Workspaces
+
+1. **Award Review (`1,317` held-out 2025 awards · `106` flagged)**
+   - Filter by category, month timeline, review status, XAI consensus/driver, or linked PhilGEPS tender.
+   - Inspect dual-forest threshold gauges, XAI consensus tier (`3/3`, `2/3`, or `Oblique Interaction`), interactive stepped TreeSHAP waterfall, side-by-side 3-method XAI matrix, counterfactual recourse, live multi-slider what-if simulation, nearest Tagum peer contracts, and **Printable Case Verification Briefs**.
+
+2. **Tender Review (`516` held-out 2026 tenders · `48` flagged)**
+   - Screen published solicitation notices using rolling 365-day publication-time peer medians (strictly excluding same-day notices and post-publication award outcomes), cross-check related solicitation notices, and run live budget/window sensitivity tests.
+
+3. **Live XAI Triage (Pre-Publication & Custom Contract Scorer)**
+   - Score and explain **new or draft PhilGEPS tender notices** and **contract awards** in real time before or after publication.
+   - Includes realistic Tagum quick-fill presets, live autocomplete across historical Tagum suppliers (automatically pulling 365-day spend share and 30-day category burst counts), full 4-pillar XAI diagnostics, counterfactual recourse, and closest historical peer comparators.
+
+4. **XAI & Vendor Lab**
+   - **2D Oblique vs. Axis-Aligned Surface Explorer** across Award, Tender, and DPWH screens with clickable Tagum records.
+   - **Global XAI Feature Importance** comparing `Global-DIFFI`, `Mean |TreeSHAP|`, and `Mean ExIFFI`.
+   - **Procurement Intelligence**: Top-60 **Vendor Concentration Watchlist**, **30-Day Same-Category Split-Risk Clusters**, and **Archive-to-Official Overlap Candidates** (`326` register rows in `1,765` candidate pairs).
+
+5. **Infrastructure (`336` Tagum DPWH contracts · `23` barangays · `10` flood-map matches)**
+   - **Barangay Choropleth Map** shading Tagum's 23 barangays by DPWH XAI flags, mean schedule delay variance, project count, or flood-control links, paired with full 4-pillar DPWH XAI case inspection and review logging.
+
+6. **Saved Reviews & Immutable Audit Trail**
+   - Optimistic-concurrency SQLite storage across `award:`, `tender:`, and `dpwh:` cases, review funnel KPIs, chronological **Server Revision History**, CSV export, portable JSON backup/restore with side-by-side conflict resolution, and optional team token authentication.
+
+7. **Validation & Reproducibility**
+   - Source reconciliation tables (`11,305 + 3,193 − 2,198 = 12,300` award register rows), chronological Warm-up / Training / Calibration / Evaluation splits, TreeSHAP exactness, feature-deletion faithfulness, 8-seed rank stability, counterfactual recourse validity/sparsity, and synthetic stress benchmarks.
+
+---
+
+## REST API Reference
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/health` | `GET` | Readiness probe (`status`, `snapshot_id`, `db_ready`, `live_xai_available`, `counts`) |
+| `/api/reviews` | `GET`, `PUT` | Read or upsert optimistic-concurrency case reviews for the active `snapshot_id` |
+| `/api/reviews/history` | `GET` | Chronological revision log from `review_changes` (`?snapshot_id=...&case_key=...&limit=50`) |
+| `/api/xai/meta` | `GET` | Categories, procurement modes, classifications, cutoffs, global XAI vectors, and triage presets |
+| `/api/xai/vendors` | `GET` | Historical Tagum vendor search (`?q=...&limit=25`) with award counts, spend share, and 30d bursts |
+| `/api/xai/score-tender` | `POST` | Live 4-pillar XAI scoring, recourse, statutory checks, and peers for a tender notice |
+| `/api/xai/score-award` | `POST` | Live 4-pillar XAI scoring, vendor lookup, recourse, statutory checks, and peers for an award |
+| `/api/xai/whatif` | `POST` | Live multi-feature sensitivity & TreeSHAP recalculation (`award`, `tender`, or `dpwh`) |
+| `/api/xai/surface` | `GET` | 2D Isolation Forest vs. Extended Isolation Forest contour grid (`?kind=tender&fx=0&fy=1`) |
+
+---
+
+## Rebuild Snapshot & Run Tests
+
+```bash
+# Rebuild review/Bantay_Kontrata_Dashboard.html, ranked CSVs, crosswalks, and validation.json
+python publish_dashboard.py
+
+# Stage a new quarterly PS-PhilGEPS CSV release
+python refresh_official.py \
+  --input DATASETS_PHILGEPS_2026_JULY-SEPTEMBER.csv \
+  --release 2026Q3 \
+  --source-page https://philgeps.gov.ph/CmsHomePages/open-data \
+  --output staged-2026Q3
+python publish_dashboard.py --data staged-2026Q3 --output review-2026Q3
+
+# Run the full 36-test suite (reconciliation, temporal context, XAI engine, app security, live APIs)
+python -m unittest discover -s tests -v
+```
+
+### Key Repository Files
+
+| Path | Purpose |
+|---|---|
+| `app.py`, `wsgi.py` | Flask/WSGI production web server, SQLite review store, revision history, and Live XAI APIs |
+| `xai_engine.py` | Four-pillar XAI stack, counterfactual recourse, statutory checks, DPWH screen, intelligence, and `LiveXAIEngine` |
+| `screen.py`, `tender_screen.py` | Chronological award and tender Isolation Forest + Extended Isolation Forest pipelines and stress evaluations |
+| `integration.py`, `refresh_official.py` | Archive-to-official PhilGEPS reconciliation and quarterly release staging |
+| `publish_dashboard.py` | Snapshot compiler generating `review/Bantay_Kontrata_Dashboard.html`, CSV tables, and `validation.json` |
+| `dashboard_template.html`, `review_workflow.js` | Self-contained 7-tab XAI web workstation and offline-capable review workflow |
+| `Dockerfile`, `render.yaml`, `railway.json`, `Procfile` | Cloud and container deployment configurations |
+| `tests/` | Automated unit and end-to-end tests (`test_xai_engine.py`, `test_deploy_and_live_xai.py`, `test_app.py`, `test_project.py`, `test_refresh_official.py`) |

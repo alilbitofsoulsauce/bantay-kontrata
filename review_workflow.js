@@ -7,22 +7,64 @@ const reviewStatuses = new Map([
 const reviewLimits = {reviewer:80,evidence_url:650,evidence_ref:200,notes:2000};
 const reviewSchema = "bantay-kontrata-tagum-reviews-v1";
 const reviewStorageKey = reviewSchema + ":" + data.snapshot_id;
+const reviewTokenStorageKey = "bantay-kontrata-review-token";
 const serverReviewMode = document.documentElement.dataset.reviewStore === "server";
 const reviewDate = new Intl.DateTimeFormat("en-PH",{
   dateStyle:"medium",timeStyle:"short",timeZone:"Asia/Manila"
 });
 const reviewKey = (kind,d) => kind + ":" + d[reviewViews[kind].key];
 const sameReview = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+const recordsForReviewKind = kind => {
+  const view = reviewViews[kind];
+  if (typeof view?.records === "function") return view.records();
+  if (kind === "dpwh") return data.projects || data.dpwh?.records || [];
+  return data[kind]?.records || [];
+};
 const reviewRecords = new Map(Object.keys(reviewViews).flatMap(kind =>
-  data[kind].records.map(d => [reviewKey(kind,d),{kind,d}])
+  recordsForReviewKind(kind)
+    .filter(d => d && typeof d[reviewViews[kind].key] === "string" && d[reviewViews[kind].key].trim())
+    .map(d => [reviewKey(kind,d),{kind,d}])
 ));
 let reviewStore = null;
 let reviewLog = new Map();
 let reviewRevision = null;
 let reviewConnection = "connecting";
+let reviewAuthToken = "";
+let serverHealth = null;
+let reviewHistoryLoading = false;
 const reviewDrafts = new Map();
 const reviewSaves = new Set();
 const reviewSaveMessages = new Map();
+
+function loadStoredReviewToken() {
+  try {
+    return window.sessionStorage.getItem(reviewTokenStorageKey) || "";
+  } catch {
+    return "";
+  }
+}
+
+function saveStoredReviewToken(token) {
+  reviewAuthToken = String(token || "").trim();
+  try {
+    if (reviewAuthToken) window.sessionStorage.setItem(reviewTokenStorageKey,reviewAuthToken);
+    else window.sessionStorage.removeItem(reviewTokenStorageKey);
+  } catch {
+    // sessionStorage unavailable in restricted contexts; keep in-memory token
+  }
+}
+
+function isDpwhReviewEnabled() {
+  if (!serverReviewMode) return true;
+  if (!serverHealth) return true;
+  if (serverHealth.dpwh_reviews_enabled === false) return false;
+  const counts = serverHealth.counts;
+  if (counts && typeof counts.review_keys === "number") {
+    const baseCount = data.award.records.length + data.tender.records.length;
+    if (counts.review_keys === baseCount && (data.projects || []).length > 0) return false;
+  }
+  return true;
+}
 
 function evidenceLink(value) {
   if (!value) return "";
@@ -91,7 +133,8 @@ function persistReviews(entries) {
 
 function syncServerReviewForms() {
   for (const view of Object.values(reviewViews)) {
-    id(view.inspector).querySelector(".review-entry form")?.dispatchEvent(new Event("reviewstorechange"));
+    const inspectorNode = id(view.inspector);
+    inspectorNode?.querySelector(".review-entry form")?.dispatchEvent(new Event("reviewstorechange"));
   }
 }
 
@@ -99,6 +142,7 @@ function updateReviewViews() {
   renderSavedReviews();
   paintQueueStatuses("award");
   paintQueueStatuses("tender");
+  paintQueueStatuses("dpwh");
   if (typeof refreshReviewStatusQueues === "function") refreshReviewStatusQueues();
   if (serverReviewMode) syncServerReviewForms();
 }
@@ -108,18 +152,38 @@ function showReviewDatabaseUnavailable() {
   updateReviewViews();
 }
 
+function revealReviewTokenBox(promptMessage = "") {
+  const box = id("reviewTokenBox");
+  if (!box) return;
+  box.hidden = false;
+  const statusNode = id("reviewTokenStatus");
+  if (statusNode && promptMessage) {
+    statusNode.dataset.state = "error";
+    statusNode.textContent = promptMessage;
+  }
+}
+
 async function requestServerReviews(update) {
   let response, payload;
   try {
-    response = update ? await fetch("/api/reviews",{
-      method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(update)
-    }) : await fetch("/api/reviews?snapshot_id=" + encodeURIComponent(data.snapshot_id),{cache:"no-store"});
+    if (update) {
+      const headers = {"Content-Type":"application/json"};
+      if (reviewAuthToken) headers["X-Review-Token"] = reviewAuthToken;
+      response = await fetch("/api/reviews",{
+        method:"PUT",headers,body:JSON.stringify(update)
+      });
+    } else {
+      response = await fetch("/api/reviews?snapshot_id=" + encodeURIComponent(data.snapshot_id),{cache:"no-store"});
+    }
     payload = await response.json();
   } catch {
     showReviewDatabaseUnavailable();
     throw new Error("Could not reach the app’s reviews database. Try again.");
   }
   if (!response.ok) {
+    if (update && (response.status === 401 || response.status === 403) && /token|auth/i.test(String(payload?.error || ""))) {
+      revealReviewTokenBox("Team review token required to save changes. Enter the access token in Saved reviews.");
+    }
     if (!update || response.status >= 500 || reviewRevision === null) showReviewDatabaseUnavailable();
     const error = new Error(typeof payload?.error === "string" ? payload.error : "The reviews database rejected the request.");
     error.status = response.status;
@@ -139,6 +203,7 @@ async function requestServerReviews(update) {
   }
   reviewConnection = "connected";
   updateReviewViews();
+  if (update && id("reviewHistoryPanel")?.open) loadServerRevisionHistory();
   return {entries:reviewLog,revision:reviewRevision};
 }
 
@@ -157,7 +222,9 @@ async function persistReviewChanges(state,entries,source) {
 }
 
 function paintQueueStatuses(kind) {
-  for (const badge of id(kind + "Table").querySelectorAll("[data-review-key]")) {
+  const table = id(kind + "Table");
+  if (!table) return;
+  for (const badge of table.querySelectorAll("[data-review-key]")) {
     const review = reviewLog.get(badge.dataset.reviewKey);
     badge.textContent = review ? " · " + reviewStatuses.get(review.status) : "";
   }
@@ -190,7 +257,9 @@ function setReviewDraft(key,draft) {
 }
 
 function drawCaseReview(container,kind,d) {
+  if (kind === "dpwh" && !isDpwhReviewEnabled()) return;
   const key = reviewKey(kind,d);
+  if (!reviewRecords.has(key)) return;
   const draft = reviewDrafts.get(key);
   let original = draft ? draft.original : loadReviews().get(key);
   const entered = draft?.fields ?? reviewFields(original);
@@ -424,10 +493,34 @@ function drawCaseReview(container,kind,d) {
 }
 
 function openSavedReview(key) {
-  const {kind,d} = reviewRecords.get(key);
+  const match = reviewRecords.get(key);
+  if (!match) return;
+  const {kind,d} = match;
   const view = reviewViews[kind];
+  if (kind === "dpwh") {
+    if (id("dpwhSearch")) id("dpwhSearch").value = "";
+    if (id("dpwhBarangay")) id("dpwhBarangay").value = "";
+    if (id("dpwhFlood")) id("dpwhFlood").checked = false;
+    if (id("dpwhFlagsOnly")) id("dpwhFlagsOnly").checked = false;
+    if (id("dpwhReviewStatus")) id("dpwhReviewStatus").value = "";
+    selectTab(id(view.tabId || "infrastructure-tab"));
+    projectState.selected = d.dpwh_contract_id;
+    const filtered = projectFilter();
+    const rowIndex = Math.max(0,filtered.indexOf(d));
+    projectState.page = Math.floor(rowIndex / projectPageSize);
+    renderProjects(d.dpwh_contract_id);
+    const panel = id(view.inspector)?.querySelector(".review-entry");
+    if (panel) {
+      panel.open = true;
+      panel.querySelector("summary")?.focus();
+      panel.scrollIntoView({block:"nearest"});
+    }
+    return;
+  }
   const statusFilter = id(kind + "ReviewStatus");
   if (statusFilter) statusFilter.value = "";
+  const xaiFilter = id(kind + "XaiFilter");
+  if (xaiFilter) xaiFilter.value = "";
   if (kind === "award") {
     id("awardSearch").value = "";
     id("awardCategory").value = "";
@@ -440,22 +533,48 @@ function openSavedReview(key) {
     id("tenderMode").value = "";
     id("tenderFlagsOnly").checked = false;
   }
-  selectTab(id(view.verb + "-tab"));
+  selectTab(id(view.tabId || (view.verb + "-tab")));
   view.state.page = Math.floor(data[kind].records.indexOf(d) / reviewPageSize);
   renderReview(kind,d[view.key]);
   if (typeof showReviewCase === "function") showReviewCase(kind);
-  const panel = id(view.inspector).querySelector(".review-entry");
-  panel.open = true;
-  panel.querySelector("summary").focus();
-  panel.scrollIntoView({block:"nearest"});
+  const panel = id(view.inspector)?.querySelector(".review-entry");
+  if (panel) {
+    panel.open = true;
+    panel.querySelector("summary")?.focus();
+    panel.scrollIntoView({block:"nearest"});
+  }
 }
 
 function sortedReviews(entries = loadReviews()) {
   return [...entries.values()].sort((a,b) => b.updated_at.localeCompare(a.updated_at));
 }
 
+function renderSavedProgressMetrics(entries) {
+  const flaggedAwards = data.award.records.filter(d => d.review);
+  const reviewedAwardFlags = flaggedAwards.filter(d => reviewLog.has(reviewKey("award",d))).length;
+  const flaggedTenders = data.tender.records.filter(d => d.review);
+  const reviewedTenderFlags = flaggedTenders.filter(d => reviewLog.has(reviewKey("tender",d))).length;
+  const followUps = entries.filter(entry => entry.status === "follow_up" || entry.status === "needs_documents").length;
+  const awardPct = flaggedAwards.length ? (100 * reviewedAwardFlags / flaggedAwards.length).toFixed(1) + "%" : "0.0%";
+  const tenderPct = flaggedTenders.length ? (100 * reviewedTenderFlags / flaggedTenders.length).toFixed(1) + "%" : "0.0%";
+
+  if (id("savedAwardProgress")) {
+    id("savedAwardProgress").textContent = awardPct;
+    const sub = id("savedAwardProgressSub");
+    if (sub) sub.textContent = number.format(reviewedAwardFlags) + " of " + number.format(flaggedAwards.length) + " flagged awards logged";
+  }
+  if (id("savedTenderProgress")) {
+    id("savedTenderProgress").textContent = tenderPct;
+    const sub = id("savedTenderProgressSub");
+    if (sub) sub.textContent = number.format(reviewedTenderFlags) + " of " + number.format(flaggedTenders.length) + " flagged tenders logged";
+  }
+  if (id("savedFollowUpCount")) id("savedFollowUpCount").textContent = number.format(followUps);
+  if (id("savedTotalCount")) id("savedTotalCount").textContent = number.format(entries.length);
+}
+
 function renderSavedReviews() {
   const entries = sortedReviews();
+  renderSavedProgressMetrics(entries);
   const selected = id("savedStatus").value;
   const visible = entries.filter(entry => !selected || entry.status === selected);
   const table = id("savedCases");
@@ -472,7 +591,8 @@ function renderSavedReviews() {
   const appConnection = id("appConnection");
   if (appConnection) {
     const states = {
-      connecting:["connecting","Connecting"],connected:["ready","Database ready"],
+      connecting:["connecting","Connecting"],
+      connected:["ready",serverHealth?.live_xai_available ? "Database & Live XAI ready" : "Database ready"],
       unavailable:["unavailable","Database unavailable"]
     };
     const [state,message] = serverReviewMode ? states[reviewConnection] : reviewStore ?
@@ -482,7 +602,9 @@ function renderSavedReviews() {
   }
   id("reviewCsv").disabled = id("reviewBackup").disabled = !serverReviewMode && entries.length === 0;
   for (const entry of visible) {
-    const {kind,d} = reviewRecords.get(entry.key);
+    const match = reviewRecords.get(entry.key);
+    if (!match) continue;
+    const {kind,d} = match;
     const row = node("tr");
     const record = addCell(row,"");
     const button = node("button",reviewViews[kind].title(d),"case-button");
@@ -498,9 +620,125 @@ function renderSavedReviews() {
     const row = node("tr");
     addCell(row,entries.length ? "No saved reviews match this status." : serverReviewMode && reviewConnection !== "connected" ?
       "Saved reviews are currently unavailable." :
-      "Open a record in either review queue to save your first review.").colSpan = 4;
+      "Open a record in any review queue to save your first review.").colSpan = 4;
     table.append(row);
   }
+}
+
+async function loadServerRevisionHistory() {
+  const body = id("reviewHistoryBody");
+  const statusText = id("reviewHistoryStatus");
+  if (!serverReviewMode || !body || reviewHistoryLoading) return;
+  reviewHistoryLoading = true;
+  if (statusText) statusText.textContent = "Loading server revision log…";
+  try {
+    const url = "/api/reviews/history?snapshot_id=" + encodeURIComponent(data.snapshot_id) + "&limit=50";
+    const response = await fetch(url,{cache:"no-store"});
+    if (!response.ok) {
+      if (statusText) {
+        statusText.textContent = response.status === 404
+          ? "Revision history endpoint is not enabled on this server build."
+          : "Could not load server revision history.";
+      }
+      return;
+    }
+    const payload = await response.json();
+    const history = Array.isArray(payload?.history) ? payload.history : [];
+    body.replaceChildren();
+    if (!history.length) {
+      const row = node("tr");
+      addCell(row,"No review revisions recorded yet for this snapshot.").colSpan = 6;
+      body.append(row);
+      if (statusText) statusText.textContent = "0 recorded revisions";
+      return;
+    }
+    if (statusText) statusText.textContent = "Showing latest " + number.format(history.length) + " database revisions";
+    for (const item of history) {
+      const rawEntries = typeof item.entries === "string" ? JSON.parse(item.entries) : (item.entries || []);
+      const list = Array.isArray(rawEntries) ? rawEntries : [];
+      const first = list[0];
+      const row = node("tr");
+      addCell(row,"#" + number.format(item.revision),"num");
+      const stamp = item.recorded_at && Number.isFinite(Date.parse(item.recorded_at))
+        ? reviewDate.format(new Date(item.recorded_at))
+        : (item.recorded_at || "—");
+      addCell(row,stamp);
+      const sourceBadge = node("span",item.source === "backup" ? "Backup import" : "Case edit",
+        "pill " + (item.source === "backup" ? "neutral" : "teal"));
+      const sourceCell = addCell(row,"");
+      sourceCell.append(sourceBadge);
+      addCell(row,list.length > 1
+        ? Array.from(new Set(list.map(e => e.reviewer).filter(Boolean))).join(", ") || "—"
+        : (first?.reviewer || "—"));
+      const caseCell = addCell(row,"");
+      if (list.length === 1 && first?.key && reviewRecords.has(first.key)) {
+        const {kind,d} = reviewRecords.get(first.key);
+        const btn = node("button",reviewViews[kind].title(d),"case-button");
+        btn.type = "button";
+        btn.onclick = () => openSavedReview(first.key);
+        caseCell.append(btn,node("span",first.key,"case-sub"));
+      } else if (list.length > 1) {
+        caseCell.textContent = number.format(list.length) + " cases updated in batch";
+      } else {
+        caseCell.textContent = first?.key || "—";
+      }
+      addCell(row,list.length === 1 && first?.status ? (reviewStatuses.get(first.status) || first.status) : "Batch");
+      body.append(row);
+    }
+  } catch {
+    if (statusText) statusText.textContent = "Could not reach /api/reviews/history.";
+  } finally {
+    reviewHistoryLoading = false;
+  }
+}
+
+async function checkServerHealth() {
+  if (!serverReviewMode) return;
+  try {
+    const response = await fetch("/api/health",{cache:"no-store"});
+    if (!response.ok) return;
+    const payload = await response.json();
+    if (!payload || typeof payload !== "object") return;
+    serverHealth = payload;
+    if (payload.review_token_required) {
+      revealReviewTokenBox(reviewAuthToken ? "" : "This deployment requires a team review token to save changes.");
+    }
+    updateReviewViews();
+    window.dispatchEvent(new CustomEvent("bantayhealth",{detail:payload}));
+  } catch {
+    // Older server without /api/health continues seamlessly
+  }
+}
+
+function setupReviewTokenControls() {
+  reviewAuthToken = loadStoredReviewToken();
+  const box = id("reviewTokenBox");
+  const input = id("reviewTokenInput");
+  const saveBtn = id("reviewTokenSave");
+  const clearBtn = id("reviewTokenClear");
+  const statusNode = id("reviewTokenStatus");
+  if (!box || !input || !saveBtn || !clearBtn || !statusNode) return;
+  input.value = reviewAuthToken;
+  const paintTokenState = (message,tone = "") => {
+    statusNode.dataset.state = tone;
+    statusNode.textContent = message;
+  };
+  if (reviewAuthToken) {
+    box.hidden = false;
+    paintTokenState("Team review token active in this browser tab.","success");
+  }
+  saveBtn.onclick = () => {
+    saveStoredReviewToken(input.value);
+    paintTokenState(
+      reviewAuthToken ? "Access token saved for this session. Writes will include X-Review-Token." : "Access token cleared.",
+      reviewAuthToken ? "success" : ""
+    );
+  };
+  clearBtn.onclick = () => {
+    input.value = "";
+    saveStoredReviewToken("");
+    paintTokenState("Access token cleared.","");
+  };
 }
 
 function csvCell(value) {
@@ -515,13 +753,16 @@ function reviewCsv(entries) {
     "amount_or_budget_php","isolation_forest_score","above_cutoff","review_status","reviewer",
     "official_notice_url","evidence_url","notes","updated_at_utc","evidence_ref"
   ];
-  const rows = entries.map(entry => {
+  const rows = entries.filter(entry => reviewRecords.has(entry.key)).map(entry => {
     const {kind,d} = reviewRecords.get(entry.key);
     return [
-      data.snapshot_id,entry.key,kind,reviewViews[kind].title(d),d.award_date || d.published_date,
-      d.bid_reference,d.official_award_reference,d.contract_amount ?? d.approved_budget_php,
-      d.anomaly_score,d.review,reviewStatuses.get(entry.status),entry.reviewer,
-      d.official_notice_link,entry.evidence_url,entry.notes,entry.updated_at,entry.evidence_ref
+      data.snapshot_id,entry.key,kind,reviewViews[kind].title(d),
+      d.award_date || d.published_date || d.start_date || d.infra_year || "",
+      d.bid_reference || "",
+      d.official_award_reference || d.dpwh_contract_id || "",
+      d.contract_amount ?? d.approved_budget_php ?? d.contract_cost_php ?? d.abc_php ?? "",
+      d.anomaly_score ?? "",d.review ?? "",reviewStatuses.get(entry.status),entry.reviewer,
+      d.official_notice_link || d.source_url || "",entry.evidence_url,entry.notes,entry.updated_at,entry.evidence_ref
     ];
   });
   return "\uFEFF" + [columns,...rows].map(row => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
@@ -642,6 +883,7 @@ function initializeReviewWorkflow() {
       reviewStore = null;
     }
   }
+  setupReviewTokenControls();
   const snapshot = data.coverage;
   const coverageDate = new Intl.DateTimeFormat("en-PH",{dateStyle:"medium",timeZone:"UTC"});
   const snapshotBanner = id("snapshotBanner");
@@ -692,9 +934,22 @@ function initializeReviewWorkflow() {
       restore.disabled = false;
     }
   };
+  const historyPanel = id("reviewHistoryPanel");
+  const historyRefresh = id("reviewHistoryRefresh");
+  if (historyPanel && serverReviewMode) {
+    historyPanel.hidden = false;
+    historyPanel.addEventListener("toggle",() => {
+      if (historyPanel.open) loadServerRevisionHistory();
+    });
+    if (historyRefresh) historyRefresh.onclick = () => loadServerRevisionHistory();
+  }
   renderSavedReviews();
   if (serverReviewMode) {
-    const refresh = () => requestServerReviews().catch(() => {});
+    checkServerHealth();
+    const refresh = () => {
+      requestServerReviews().catch(() => {});
+      if (historyPanel?.open) loadServerRevisionHistory();
+    };
     window.addEventListener("focus",refresh);
     id("saved-tab").addEventListener("click",refresh);
     refresh();
